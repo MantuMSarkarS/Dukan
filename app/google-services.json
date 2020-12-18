@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "1044052967122",
+    "firebase_url": "https://dukan-2b34b.firebaseio.com",
+    "project_id": "dukan-2b34b",
+    "storage_bucket": "dukan-2b34b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1044052967122:android:0a77357afb7991114e370b",
+        "android_client_info": {
+          "package_name": "com.milkyway.dukan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1044052967122-phdblco9k6c7g17vr2k3shtnbth88eu1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.milkyway.dukan",
+            "certificate_hash": "992f1ec5d40e7bde0375f478b729b78f2469b97b"
+          }
+        },
+        {
+          "client_id": "1044052967122-h14mcc7d2vlqf3vgrf78e4e3b1fsl58s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.milkyway.dukan",
+            "certificate_hash": "93a4bf422845af06b25eb0c04c948dc1536e6e58"
+          }
+        },
+        {
+          "client_id": "1044052967122-oj6ohufnlrfd36c9utk0nidsqu2hsj94.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSMqBgzYgtFBcyV-i0WomKfqaxCc9r1Wc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1044052967122-oj6ohufnlrfd36c9utk0nidsqu2hsj94.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

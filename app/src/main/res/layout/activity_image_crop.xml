@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000"
+    tools:activity=".activity.ImageCropActivity">
+
+    <LinearLayout
+        android:id="@+id/bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+
+        <Button
+            android:id="@+id/cancel_btn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:backgroundTint="#000"
+            android:text="Cancel"
+            android:textColor="#fff" />
+
+        <ImageButton
+            android:id="@+id/rotate_btn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:backgroundTint="#000"
+            android:src="@drawable/crop_image_menu_rotate_left" />
+
+        <Button
+            android:id="@+id/done_btn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:backgroundTint="#000"
+            android:text="Done"
+            android:textColor="#fff" />
+
+    </LinearLayout>
+
+    <com.theartofdev.edmodo.cropper.CropImageView
+        android:layout_width="match_parent"
+        android:layout_above="@id/bottom_bar"
+        android:id="@+id/crop_image_view"
+        android:layout_height="match_parent">
+
+    </com.theartofdev.edmodo.cropper.CropImageView>
+
+</RelativeLayout>

@@ -1,0 +1,12 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">#38B693</item>
+        <item name="colorPrimaryDark">#44ACC6</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="CustomTextInputLayoutStyle.ErrorTextStyle" parent="TextAppearance.Design.Error">
+        <item name="android:textSize">10sp</item>
+    </style>
+</resources>
