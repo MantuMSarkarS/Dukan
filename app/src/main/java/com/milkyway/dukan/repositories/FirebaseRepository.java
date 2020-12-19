@@ -16,20 +16,27 @@ public class FirebaseRepository {
     private OnFirebaseTaskComplete onFirebaseTaskComplete;
     private FirebaseFirestore mFirestore=FirebaseFirestore.getInstance();
     private CollectionReference mReference=mFirestore.collection("Categories");
+    private CollectionReference mCategoryReference=mFirestore.collection("Category");
 
     public FirebaseRepository(OnFirebaseTaskComplete onFirebaseTaskComplete) {
         this.onFirebaseTaskComplete = onFirebaseTaskComplete;
     }
 
     public void getCategoryList(){
-        mReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if(task.isSuccessful()){
-                        onFirebaseTaskComplete.categoryList(task.getResult().toObjects(SliderImage.class));
-                    }else {
-                        onFirebaseTaskComplete.error(task.getException());
-                    }
+        mReference.get().addOnCompleteListener(task -> {
+                if(task.isSuccessful()){
+                    onFirebaseTaskComplete.categoryList(task.getResult().toObjects(SliderImage.class));
+                }else {
+                    onFirebaseTaskComplete.error(task.getException());
+                }
+        });
+    }
+    public void getCategoryDetailsList(){
+        mCategoryReference.get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                onFirebaseTaskComplete.categoryList(task.getResult().toObjects(SliderImage.class));
+            }else {
+                onFirebaseTaskComplete.error(task.getException());
             }
         });
     }

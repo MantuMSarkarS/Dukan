@@ -32,6 +32,7 @@ import com.milkyway.dukan.databinding.FragmentCategoryBinding;
 import com.milkyway.dukan.model.SliderImage;
 import com.milkyway.dukan.util.Session;
 import com.milkyway.dukan.viewModel.CategoriesViewModel;
+import com.milkyway.dukan.viewModel.CategoryDetailsViewModel;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class CategoryFragment extends Fragment {
     FragmentCategoryBinding mBinding;
     String mCategoryId;
     Session session;
-    CategoriesViewModel viewModel;
+    CategoryDetailsViewModel viewModel;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -55,7 +56,7 @@ public class CategoryFragment extends Fragment {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_category, container, false);
         View view = mBinding.getRoot();
         session = new Session(requireContext());
-        viewModel = new ViewModelProvider(requireActivity()).get(CategoriesViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(CategoryDetailsViewModel.class);
         return view;
 
     }
@@ -87,40 +88,27 @@ public class CategoryFragment extends Fragment {
         }
 
         viewModel.getCategoryModelData().observe(getViewLifecycleOwner(), images -> {
-            List<SliderImage> list= new ArrayList<>();
-            list.clear();
-            list=images;
-            for(int i=0 ; i<images.size();i++){
-                if(images.get(i).getCategoryId().equals("AC")){
-                    list.remove(i);
-                    i--;
+           mBinding.recyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
+            CategoryRecyclerViewAdapter adapter=new CategoryRecyclerViewAdapter(images, getContext(),"category", (imageList, position) -> {
+                mCategoryId = images.get(position).getCategoryId();
+                CategoryFragment fragment=new CategoryFragment();
+                Bundle bundle1 =new Bundle();
+                if(mCategoryId.equals("AC")){
+                    bundle1.putString("categoryId","AC");
+                }else if(mCategoryId.equals("AP")){
+                    bundle1.putString("categoryId","AP");
+                }else if(mCategoryId.equals("EC")){
+                    bundle1.putString("categoryId","EC");
+                }else if(mCategoryId.equals("FD")){
+                    bundle1.putString("categoryId","FD");
+                }else if(mCategoryId.equals("FS")){
+                    bundle1.putString("categoryId","FS");
                 }
-            }
-
-            mBinding.recyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
-            CategoryRecyclerViewAdapter adapter=new CategoryRecyclerViewAdapter(list, getContext(),"category", new CategoryRecyclerViewAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(SliderImage imageList, int position) {
-                    mCategoryId = images.get(position).getCategoryId();
-                    CategoryFragment fragment=new CategoryFragment();
-                    Bundle bundle=new Bundle();
-                    if(mCategoryId.equals("AC")){
-                        bundle.putString("categoryId","AC");
-                    }else if(mCategoryId.equals("AP")){
-                        bundle.putString("categoryId","AP");
-                    }else if(mCategoryId.equals("EC")){
-                        bundle.putString("categoryId","EC");
-                    }else if(mCategoryId.equals("FD")){
-                        bundle.putString("categoryId","FD");
-                    }else if(mCategoryId.equals("FS")){
-                        bundle.putString("categoryId","FS");
-                    }
-                    fragment.setArguments(bundle);
-                    requireActivity().getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.fragment, fragment)
-                            .commit();
-                }
+                fragment.setArguments(bundle1);
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment, fragment)
+                        .commit();
             });
             adapter.notifyDataSetChanged();
             mBinding.recyclerView.setAdapter(adapter);

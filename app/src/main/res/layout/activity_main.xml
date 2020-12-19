@@ -13,13 +13,152 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:background="#38B693"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#38B693"
-            android:id="@+id/toolbar"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            android:elevation="4dp"/>
+            app:contentInsetLeft="0dp"
+            app:contentInsetRight="0dp"
+            app:layout_collapseMode="pin"
+            app:titleTextColor="@color/white">
+
+
+            <!--  toolbar search layout-->
+            <RelativeLayout
+                android:id="@+id/searchViewLayout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_42dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dimen_16dp"
+                android:background="@drawable/rounded_bg_white"
+                android:backgroundTint="#17FFFFFF"
+                android:visibility="gone">
+
+
+                <EditText
+                    android:id="@+id/searchView"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_42dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dimen_16dp"
+                    android:layout_marginRight="@dimen/dimen_16dp"
+                    android:focusable="true"
+                    android:layout_toLeftOf="@+id/cancel"
+                    android:backgroundTint="@android:color/transparent"
+                    android:drawableLeft="@drawable/search"
+                    android:drawablePadding="@dimen/dimen_15dp"
+                    android:fontFamily="@font/josefinsans_regular"
+                    android:hint="Search by coupon name, category"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white" />
+
+
+                <ImageView
+                    android:id="@+id/cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/dimen_16dp"
+                    app:srcCompat="@drawable/ic_close_black"
+                    android:text="Cancel"
+                    android:textColor="@color/white"
+                     />
+
+
+            </RelativeLayout>
+
+
+            <!--  toolbar menu-->
+
+           <!-- <RelativeLayout
+                android:id="@+id/menu_icon"
+                android:layout_width="@dimen/dimen_32dp"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/menu" />
+
+
+            </RelativeLayout>-->
+
+
+            <!--  toolbar coustom search btn-->
+            <RelativeLayout
+                android:id="@+id/searchBtn"
+                android:layout_width="@dimen/dimen_32dp"
+                android:layout_height="@dimen/dimen_32dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dimen_20dp"
+                android:layout_toRightOf="@+id/menu_icon"
+                android:background="@drawable/rounded_bg_white"
+                android:backgroundTint="#17FFFFFF"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/searchBtn1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_centerVertical="true"
+                    android:padding="@dimen/dimen_8dp"
+                    android:paddingRight="@dimen/dimen_4dp"
+                    android:src="@drawable/search" />
+
+            </RelativeLayout>
+
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/josefinsans_bold"
+                android:gravity="center"
+                android:paddingRight="@dimen/dimen_40dp"
+                android:text="Home"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dimen_18dp"
+                android:visibility="gone" />
+
+
+            <!--  toolbar notification-->
+
+            <LinearLayout
+                android:id="@+id/NotificationBell"
+                android:layout_width="@dimen/dimen_80dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="right|center">
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/dimen_16dp"
+                    android:layout_width="@dimen/dimen_24dp"
+                    android:layout_height="@dimen/dimen_24dp"
+                    android:layout_centerInParent="true"
+                    android:layout_centerVertical="true"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/notifications" />
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/dimen_16dp"
+                    android:layout_width="@dimen/dimen_24dp"
+                    android:layout_height="@dimen/dimen_24dp"
+                    android:layout_centerInParent="true"
+                    android:layout_centerVertical="true"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/cart_white" />
+            </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
 
         <fragment
             android:id="@+id/fragment"
