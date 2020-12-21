@@ -25,6 +25,7 @@ public class ViewPagerAdapter extends PagerAdapter {
     List<ViewPagerSliderImage> mCategories;
     LayoutInflater mLayoutInflater;
     Context mContext;
+    int custom_position=0;
 
     public ViewPagerAdapter( Context mContext,List<ViewPagerSliderImage> mCategories) {
         this.mCategories = mCategories;
@@ -34,15 +35,21 @@ public class ViewPagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return mCategories.size();
+        return Integer.MAX_VALUE;
     }
 
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
+
+        if (custom_position>4){
+            custom_position=0;
+        }
+        ViewPagerSliderImage image=mCategories.get(custom_position);
+        custom_position++;
         View items=mLayoutInflater.inflate(R.layout.item,container,false);
         ImageView imageView=items.findViewById(R.id.imageViewMain);
-        ViewPagerSliderImage image=mCategories.get(position);
+
         Picasso.with(mContext).load(image.getImage()).placeholder(R.drawable.icon).error(R.drawable.icon).into(new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -65,7 +72,7 @@ public class ViewPagerAdapter extends PagerAdapter {
 
     @Override
     public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-        return view == (LinearLayout)object;
+        return view == object;
     }
 
     @Override

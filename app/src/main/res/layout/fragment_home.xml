@@ -75,13 +75,13 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_150dp" />
         <LinearLayout
+            android:elevation="@dimen/dimen_8dp"
+            android:layout_marginTop="-20dp"
             android:id="@+id/bannerDotsLayout"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
             android:layout_marginBottom="@dimen/dimen_50dp"/>
         <FrameLayout
             android:layout_width="wrap_content"

@@ -5,20 +5,16 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.gson.Gson;
 import com.milkyway.dukan.R;
 import com.milkyway.dukan.activities.MainActivity;
 import com.milkyway.dukan.adapters.CategoryRecyclerViewAdapter;
@@ -36,20 +32,20 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class HomeFragment extends Fragment {
-    private FirebaseAuth mAuth;
     FragmentHomeBinding mBinding;
-    FirebaseFirestore fStore;
-    DocumentReference mFeference;
     ArrayList<SliderImage> categories = new ArrayList<SliderImage>();
     public static final String TAG = "Home Fragment";
     private String mCategoryId;
+    public int currentPage = 0;
     CategoriesViewModel viewModel;
     ViewpagerViewModel viewpagerViewModel;
     Session session;
     ViewPagerAdapter mViewPagerAdapter;
     List<ViewPagerSliderImage> mImages;
-    private View[] mBannerDotViews;
-    private LinearLayout mBannerDotsLayout;
+    public View[] mBannerDotViews;
+    public LinearLayout mBannerDotsLayout;
+    public int custom_position = 0;
+
     public HomeFragment() {
     }
 
@@ -63,12 +59,53 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
+
+   /* public void prepareDots(int custom_position) {
+        if (mBinding.bannerDotsLayout.getChildCount() > 0) {
+            mBinding.bannerDotsLayout.removeAllViews();
+        }
+        ImageView imageView[] = new ImageView[5];
+        for (int i = 0; i < 5; i++) {
+            imageView[i] = new ImageView(getContext());
+            if (i == custom_position) {
+                imageView[i].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.active));
+            } else {
+                imageView[i].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.inactive));
+            }
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(4, 0, 0, 4);
+            mBinding.bannerDotsLayout.addView(imageView[i], params);
+        }
+    }*/
+
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mAuth = FirebaseAuth.getInstance();
-        fStore = FirebaseFirestore.getInstance();
-        mBinding.searchItems.setOnClickListener(v->{
+    public void onResume() {
+        super.onResume();
+        ((MainActivity) requireActivity()).setActionBarTitle("Duकाন");
+       /* prepareDots(custom_position++);
+        mBinding.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+               *//* if (position > 4) {
+                    custom_position = 0;
+                }
+                prepareDots(custom_position++);*//*
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position > 4) {
+                    custom_position = 0;
+                }
+                prepareDots(custom_position++);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });*/
+        mBinding.searchItems.setOnClickListener(v -> {
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment, new SearchItemsFragment())
@@ -76,21 +113,21 @@ public class HomeFragment extends Fragment {
         });
         viewModel.getCategoryModelData().observe(getViewLifecycleOwner(), images -> {
             mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-            mBinding.recyclerView.setAdapter(new CategoryRecyclerViewAdapter(images, getContext(),"", (imageList, position) -> {
+            mBinding.recyclerView.setAdapter(new CategoryRecyclerViewAdapter(images, getContext(), "", (imageList, position) -> {
                 mCategoryId = images.get(position).getCategoryId();
-                CategoryFragment fragment=new CategoryFragment();
-                Bundle bundle=new Bundle();
-               if(mCategoryId.equals("AC")){
-                   bundle.putString("categoryId","AC");
-               }else if(mCategoryId.equals("AP")){
-                    bundle.putString("categoryId","AP");
-                }else if(mCategoryId.equals("EC")){
-                   bundle.putString("categoryId","EC");
-               }else if(mCategoryId.equals("FD")){
-                   bundle.putString("categoryId","FD");
-               }else if(mCategoryId.equals("FS")){
-                   bundle.putString("categoryId","FS");
-               }
+                CategoryFragment fragment = new CategoryFragment();
+                Bundle bundle = new Bundle();
+                if (mCategoryId.equals("AC")) {
+                    bundle.putString("categoryId", "AC");
+                } else if (mCategoryId.equals("AP")) {
+                    bundle.putString("categoryId", "AP");
+                } else if (mCategoryId.equals("EC")) {
+                    bundle.putString("categoryId", "EC");
+                } else if (mCategoryId.equals("FD")) {
+                    bundle.putString("categoryId", "FD");
+                } else if (mCategoryId.equals("FS")) {
+                    bundle.putString("categoryId", "FS");
+                }
                 fragment.setArguments(bundle);
                 requireActivity().getSupportFragmentManager()
                         .beginTransaction()
@@ -98,84 +135,25 @@ public class HomeFragment extends Fragment {
                         .commit();
             }));
         });
-        viewpagerViewModel.getViewPagerModelData().observe(getViewLifecycleOwner(),viewPagerSliderImages -> {
-            mImages.addAll(viewPagerSliderImages);
-            mBannerDotViews = new View[mImages.size()];
-            for (int i = 0; i < mImages.size(); i++) {
-                // create a new textview
-                final View bannerDotView = new View(getContext());
-                /*Creating the dynamic dots for banner*/
-                LinearLayout.LayoutParams dotLayoutParm=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                dotLayoutParm.height = getResources().getDimensionPixelSize(R.dimen.dimen_8dp);
-                dotLayoutParm.width = getResources().getDimensionPixelSize(R.dimen.dimen_8dp);
-                dotLayoutParm.setMargins(getResources().getDimensionPixelSize(R.dimen.dimen_8dp),0,0,0);
-                bannerDotView.setLayoutParams(dotLayoutParm);
-                bannerDotView.setBackground(getResources().getDrawable(R.drawable.shape_deselected_dot));
-
-                // add the textview to the linearlayout
-                mBannerDotsLayout.addView(bannerDotView);
-                // save a reference to the textview for later
-                mBannerDotViews[i] = bannerDotView;
-            }
-            mViewPagerAdapter = new ViewPagerAdapter(getContext(), viewPagerSliderImages);
+        viewpagerViewModel.getViewPagerModelData().observe(getViewLifecycleOwner(), viewPagerSliderImages -> {
+           mImages = viewPagerSliderImages;
+             final Handler handler = new Handler();
+            Timer swipeTimer = new Timer();
+            final Runnable Update = () -> {
+                if (currentPage == Integer.MAX_VALUE) {
+                    currentPage = 0;
+                }
+                mBinding.viewPager.setCurrentItem(currentPage++, true);
+            };
+            swipeTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    handler.post(Update);
+                }
+            }, 500, 3000);
+            mViewPagerAdapter = new ViewPagerAdapter(getContext(), mImages);
             mBinding.viewPager.setAdapter(mViewPagerAdapter);
         });
 
-        AutoSwipeBanner();
-        mBinding.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                changeDotBG(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
-    }
-    public void AutoSwipeBanner(){
-        final Handler handler = new Handler();
-        final Runnable Update = new Runnable() {
-            public void run() {
-                int currentPage=mBinding.viewPager.getCurrentItem();
-                if (currentPage == mImages.size()-1) {
-                    currentPage = -1;
-                }
-                mBinding.viewPager.setCurrentItem(currentPage+1, true);
-            }
-        };
-
-        Timer swipeTimer = new Timer();
-        swipeTimer.schedule(new TimerTask() {
-
-            @Override
-            public void run() {
-                handler.post(Update);
-            }
-        }, 500, 3000);
-
-    }
-    private void changeDotBG(int position){
-
-        for(int i = 0; i < mImages.size(); i++){
-            if(position==i){
-                mBannerDotViews[i].setBackground(getResources().getDrawable(R.drawable.shape_selected_dot));
-            }else{
-                mBannerDotViews[i].setBackground(getResources().getDrawable(R.drawable.shape_deselected_dot));
-            }
-
-        }
-    }
-    @Override
-    public void onResume() {
-        super.onResume();
-        ((MainActivity) requireActivity()).setActionBarTitle("Duकाন");
     }
 }
