@@ -7,23 +7,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.milkyway.dukan.R;
 import com.milkyway.dukan.activities.MainActivity;
 import com.milkyway.dukan.adapters.CategoryRecyclerViewAdapter;
+import com.milkyway.dukan.adapters.DealsRecyclerViewAdapter;
 import com.milkyway.dukan.adapters.ViewPagerAdapter;
 import com.milkyway.dukan.databinding.FragmentHomeBinding;
+import com.milkyway.dukan.model.DealsOfTheDayResponse;
 import com.milkyway.dukan.model.SliderImage;
 import com.milkyway.dukan.model.ViewPagerSliderImage;
 import com.milkyway.dukan.util.Session;
 import com.milkyway.dukan.viewModel.CategoriesViewModel;
+import com.milkyway.dukan.viewModel.DealsViewModel;
+import com.milkyway.dukan.viewModel.MostViewedViewModel;
 import com.milkyway.dukan.viewModel.ViewpagerViewModel;
 
 import java.util.ArrayList;
@@ -39,6 +45,8 @@ public class HomeFragment extends Fragment {
     public int currentPage = 0;
     CategoriesViewModel viewModel;
     ViewpagerViewModel viewpagerViewModel;
+    DealsViewModel dealsViewModel;
+    MostViewedViewModel mostViewedViewModel;
     Session session;
     ViewPagerAdapter mViewPagerAdapter;
     List<ViewPagerSliderImage> mImages;
@@ -56,6 +64,8 @@ public class HomeFragment extends Fragment {
         View view = mBinding.getRoot();
         viewModel = new ViewModelProvider(requireActivity()).get(CategoriesViewModel.class);
         viewpagerViewModel = new ViewModelProvider(requireActivity()).get(ViewpagerViewModel.class);
+        dealsViewModel = new ViewModelProvider(requireActivity()).get(DealsViewModel.class);
+        mostViewedViewModel = new ViewModelProvider(requireActivity()).get(MostViewedViewModel.class);
         return view;
     }
 
@@ -154,6 +164,17 @@ public class HomeFragment extends Fragment {
             mViewPagerAdapter = new ViewPagerAdapter(getContext(), mImages);
             mBinding.viewPager.setAdapter(mViewPagerAdapter);
         });
-
+        dealsViewModel.getDealsModelData().observe(getViewLifecycleOwner(), dealsList -> {
+            mBinding.dealsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+            mBinding.dealsRecyclerView.setAdapter(new DealsRecyclerViewAdapter(dealsList, getContext(), (imageList, position) -> {
+                Toast.makeText(getContext(), "Item Clicked", Toast.LENGTH_SHORT).show();
+            }));
+        });
+        mostViewedViewModel.getMostViewedModelData().observe(getViewLifecycleOwner(), dealsList -> {
+            mBinding.mostViewedRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+            mBinding.mostViewedRecyclerView.setAdapter(new DealsRecyclerViewAdapter(dealsList, getContext(), (imageList, position) -> {
+                Toast.makeText(getContext(), "Item Clicked", Toast.LENGTH_SHORT).show();
+            }));
+        });
     }
 }

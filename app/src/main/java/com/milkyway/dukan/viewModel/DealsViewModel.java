@@ -12,33 +12,31 @@ import com.milkyway.dukan.repositories.ViewPagerFirebaseRepository;
 
 import java.util.List;
 
-public class ViewpagerViewModel extends ViewModel implements ViewPagerFirebaseRepository.OnFirebaseTaskComplete{
-    private ViewPagerFirebaseRepository repository = new ViewPagerFirebaseRepository( this);
+public class DealsViewModel extends ViewModel implements ViewPagerFirebaseRepository.OnFirebaseTaskComplete {
 
-    private MutableLiveData<List<ViewPagerSliderImage>> liveData = new MutableLiveData<>();
+    private ViewPagerFirebaseRepository dealsrepository = new ViewPagerFirebaseRepository(this);
+    private MutableLiveData<List<DealsOfTheDayResponse>> dealsliveData = new MutableLiveData<>();
 
 
-    public LiveData<List<ViewPagerSliderImage>> getViewPagerModelData() {
-        return liveData;
+    public DealsViewModel() {
+        dealsrepository.getDealsList();
     }
 
-    public ViewpagerViewModel() {
-        repository.getViewPagerImageList();
-
+    public LiveData<List<DealsOfTheDayResponse>> getDealsModelData() {
+        return dealsliveData;
     }
-
     @Override
     public void dealsList(List<DealsOfTheDayResponse> dealsList) {
-
+        dealsliveData.setValue(dealsList);
     }
 
     @Override
     public void categoryList(List<ViewPagerSliderImage> imageList) {
-        liveData.setValue(imageList);
+
     }
 
     @Override
-    public void error(Exception e) { }
+    public void error(Exception e) {
 
-
+    }
 }

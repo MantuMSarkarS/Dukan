@@ -1,6 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <dimen name="dimen_0dp">0dp</dimen>
+    <dimen name="dimen_.5dp">.5dp</dimen>
     <dimen name="dimen_1dp">1dp</dimen>
     <dimen name="dimen_2dp">2dp</dimen>
     <dimen name="dimen_3dp">3dp</dimen>
@@ -56,6 +57,7 @@
     <dimen name="dimen_185dp">185dp</dimen>
     <dimen name="dimen_190dp">190dp</dimen>
     <dimen name="dimen_200dp">200dp</dimen>
+    <dimen name="dimen_210dp">210dp</dimen>
     <dimen name="dimen_220dp">220dp</dimen>
     <dimen name="dimen_230dp">230dp</dimen>
     <dimen name="dimen_240dp">240dp</dimen>
@@ -70,6 +72,7 @@
 
 
     <dimen name="dimen_10sp">10sp</dimen>
+    <dimen name="dimen_11sp">11sp</dimen>
     <dimen name="dimen_12sp">12sp</dimen>
     <dimen name="dimen_14sp">14sp</dimen>
     <dimen name="dimen_15sp">15sp</dimen>

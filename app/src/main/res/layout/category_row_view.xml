@@ -33,6 +33,7 @@
                 android:textSize="14sp"
                 android:layout_gravity="center"
                 android:maxLines="1"
+                android:fontFamily="@font/source_sans_pro_light"
                 android:textColor="#000"
                 android:text="All Electronics" />
         </LinearLayout>
@@ -62,6 +63,7 @@
             android:gravity="center"
             android:maxLines="1"
             android:textColor="#000"
+            android:fontFamily="@font/source_sans_pro_light"
             android:layout_height="wrap_content"
             android:text="All Electronics" />
     </LinearLayout>
