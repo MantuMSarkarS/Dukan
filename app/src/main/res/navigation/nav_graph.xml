@@ -33,6 +33,9 @@
         <action
             android:id="@+id/action_homeFragment_to_categoryFragment"
             app:destination="@id/categoryFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_dealsFragment"
+            app:destination="@id/dealsFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -51,6 +54,9 @@
         <action
             android:id="@+id/action_cartFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_cartFragment_to_noticationFragment"
+            app:destination="@id/noticationFragment" />
     </fragment>
     <fragment
         android:id="@+id/orderFragment"
@@ -69,6 +75,9 @@
         <action
             android:id="@+id/action_noticationFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_noticationFragment_to_cartFragment"
+            app:destination="@id/cartFragment" />
     </fragment>
     <fragment
         android:id="@+id/wishListFragment"
@@ -104,6 +113,15 @@
         tools:layout="@layout/fragment_category" >
         <action
             android:id="@+id/action_categoryFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/dealsFragment"
+        android:name="com.milkyway.dukan.fragments.DealsFragment"
+        android:label="fragment_deals"
+        tools:layout="@layout/fragment_deals" >
+        <action
+            android:id="@+id/action_dealsFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
 </navigation>

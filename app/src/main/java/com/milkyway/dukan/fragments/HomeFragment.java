@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -96,10 +97,6 @@ public class HomeFragment extends Fragment {
         mBinding.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-               *//* if (position > 4) {
-                    custom_position = 0;
-                }
-                prepareDots(custom_position++);*//*
             }
 
             @Override
@@ -113,6 +110,14 @@ public class HomeFragment extends Fragment {
             @Override
             public void onPageScrollStateChanged(int state) {
 
+            }
+        });*/
+       /* mBinding.nestedScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+
+            if (scrollY > oldScrollY) {
+                System.out.println("End of NestedScrollView");
+            } else {
+                System.out.println("End of NestedScrollView 1");
             }
         });*/
         mBinding.searchItems.setOnClickListener(v -> {

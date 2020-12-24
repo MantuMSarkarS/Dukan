@@ -18,5 +18,7 @@
     <string name="privacy_policy">Privacy Policy</string>
     <string name="help_center">Help Center</string>
     <string name="search_for_product_brand_and_more">Search for Product, Brand and More</string>
+    <string name="home">Home</string>
+    <string name="today_s_deals">Today\'s Deals</string>
 
 </resources>
