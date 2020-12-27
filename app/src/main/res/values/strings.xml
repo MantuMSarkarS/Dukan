@@ -18,5 +18,6 @@
     <string name="privacy_policy">Privacy Policy</string>
     <string name="help_center">Help Center</string>
     <string name="search_for_product_brand_and_more">Search for Product, Brand and More</string>
+    <string name="see_more_amp_manage"><![CDATA[See more & manage]]></string>
 
 </resources>

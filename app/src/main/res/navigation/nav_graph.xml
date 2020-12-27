@@ -63,7 +63,7 @@
     </fragment>
     <fragment
         android:id="@+id/noticationFragment"
-        android:name="com.milkyway.dukan.fragments.NoticationFragment"
+        android:name="com.milkyway.dukan.fragments.NotificationFragment"
         android:label="fragment_notication"
         tools:layout="@layout/fragment_notication" >
         <action

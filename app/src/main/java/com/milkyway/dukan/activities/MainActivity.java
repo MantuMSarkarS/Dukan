@@ -4,6 +4,7 @@ package com.milkyway.dukan.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,7 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.databinding.DataBindingUtil;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
@@ -25,12 +26,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.milkyway.dukan.R;
-import com.milkyway.dukan.fragments.LoginFragment;
+import com.milkyway.dukan.databinding.ActivityMainBinding;
 import com.milkyway.dukan.util.Session;
 import com.squareup.picasso.Picasso;
 
@@ -39,10 +38,7 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private FirebaseAuth mAuth;
-    public Toolbar toolbar;
-    public DrawerLayout drawerLayout;
     public NavController navController;
-    public NavigationView navigationView;
     public String mUsername, mEmail, mMobile, mPassword, userId;
     private Session mSession;
     public TextView name, email;
@@ -51,12 +47,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     FirebaseStorage storage;
     private StorageReference mStorageRef;
     DocumentReference reference;
+    ActivityMainBinding mBinding;
     View navView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        mBinding= DataBindingUtil.setContentView(this,R.layout.activity_main);
+        mBinding.setActivity(this);
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -66,24 +63,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getOnBackPressedDispatcher().addCallback(this, callback);
         mAuth = FirebaseAuth.getInstance();
         setupNavigation();
-
     }
 
     // Setting Up One Time Navigation
     private void setupNavigation() {
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(mBinding.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
-        navView = navigationView.getHeaderView(0);
+        navView = mBinding.navView.getHeaderView(0);
         name = navView.findViewById(R.id.user_name);
         email = navView.findViewById(R.id.user_email);
         navController = Navigation.findNavController(this, R.id.fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout);
-        NavigationUI.setupWithNavController(navigationView, navController);
-        navigationView.setNavigationItemSelectedListener(this);
+        NavigationUI.setupActionBarWithNavController(this, navController, mBinding.drawerLayout);
+        NavigationUI.setupWithNavController(mBinding.navView, navController);
+        mBinding.navView.setNavigationItemSelectedListener(this);
         userId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
         fStore = FirebaseFirestore.getInstance();
         reference = fStore.collection("Users").document(userId);
@@ -101,17 +94,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .addOnFailureListener(exception -> Toast.makeText(this, exception.getMessage(), Toast.LENGTH_SHORT).show());
             }
         });
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu,menu);
+        mBinding.   drawerLayout.closeDrawers();
+        mBinding.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+                if(id==R.id.menu_notification){
+                    navController.navigate(R.id.noticationFragment);
+                }else if(id==R.id.menu_cart) {
+                    navController.navigate(R.id.cartFragment);
+                }
+                return false;
+            }
+        });
+        return true;
     }
 
     @Override
     public boolean onSupportNavigateUp() {
-        return NavigationUI.navigateUp(Navigation.findNavController(this, R.id.fragment), drawerLayout);
+        return NavigationUI.navigateUp(Navigation.findNavController(this, R.id.fragment), mBinding.drawerLayout);
     }
 
     @Override
     public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
+        if (mBinding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mBinding.drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -124,9 +137,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         menuItem.setChecked(true);
-        drawerLayout.closeDrawers();
+        mBinding.   drawerLayout.closeDrawers();
         int id = menuItem.getItemId();
         switch (id) {
+            case R.id.home:
+                navController.navigate(R.id.homeFragment);
+                break;
+            case R.id.categories:
+                navController.navigate(R.id.categoryFragment);
+                break;
+            case R.id.deals:
+                navController.navigate(R.id.cartFragment);
+                break;
             case R.id.cart:
                 navController.navigate(R.id.cartFragment);
                 break;
@@ -160,14 +182,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
-      /*  reference.addSnapshotListener(this, (value, error) -> {
-            assert value != null;
-            name.setText(value.getString("name"));
-            email.setText(value.getString("email"));
-            islandRef.getDownloadUrl().addOnSuccessListener(uri -> Picasso.with(getBaseContext()).load(uri)
-                    .centerCrop().fit().error(R.id.profile).into((ImageView) navView.findViewById(R.id.profiles_image)))
-                    .addOnFailureListener(exception -> Toast.makeText(this, exception.getMessage(), Toast.LENGTH_SHORT).show());
 
-        });*/
     }
 }

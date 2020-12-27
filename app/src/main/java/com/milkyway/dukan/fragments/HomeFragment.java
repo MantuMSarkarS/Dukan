@@ -1,5 +1,6 @@
 package com.milkyway.dukan.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -19,8 +20,10 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.milkyway.dukan.R;
 import com.milkyway.dukan.activities.MainActivity;
+import com.milkyway.dukan.activities.SearchActivity;
 import com.milkyway.dukan.adapters.CategoryRecyclerViewAdapter;
 import com.milkyway.dukan.adapters.DealsRecyclerViewAdapter;
+import com.milkyway.dukan.adapters.TopPicksRecyclerViewAdapter;
 import com.milkyway.dukan.adapters.ViewPagerAdapter;
 import com.milkyway.dukan.databinding.FragmentHomeBinding;
 import com.milkyway.dukan.model.DealsOfTheDayResponse;
@@ -30,6 +33,7 @@ import com.milkyway.dukan.util.Session;
 import com.milkyway.dukan.viewModel.CategoriesViewModel;
 import com.milkyway.dukan.viewModel.DealsViewModel;
 import com.milkyway.dukan.viewModel.MostViewedViewModel;
+import com.milkyway.dukan.viewModel.TopPicksModel;
 import com.milkyway.dukan.viewModel.ViewpagerViewModel;
 
 import java.util.ArrayList;
@@ -44,9 +48,10 @@ public class HomeFragment extends Fragment {
     private String mCategoryId;
     public int currentPage = 0;
     CategoriesViewModel viewModel;
-    ViewpagerViewModel viewpagerViewModel;
-    DealsViewModel dealsViewModel;
-    MostViewedViewModel mostViewedViewModel;
+    ViewpagerViewModel mViewpagerViewModel;
+    DealsViewModel mDealsViewModel;
+    MostViewedViewModel mMostViewedViewModel;
+    TopPicksModel mTopPicksModel;
     Session session;
     ViewPagerAdapter mViewPagerAdapter;
     List<ViewPagerSliderImage> mImages;
@@ -63,9 +68,10 @@ public class HomeFragment extends Fragment {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
         View view = mBinding.getRoot();
         viewModel = new ViewModelProvider(requireActivity()).get(CategoriesViewModel.class);
-        viewpagerViewModel = new ViewModelProvider(requireActivity()).get(ViewpagerViewModel.class);
-        dealsViewModel = new ViewModelProvider(requireActivity()).get(DealsViewModel.class);
-        mostViewedViewModel = new ViewModelProvider(requireActivity()).get(MostViewedViewModel.class);
+        mViewpagerViewModel = new ViewModelProvider(requireActivity()).get(ViewpagerViewModel.class);
+        mDealsViewModel = new ViewModelProvider(requireActivity()).get(DealsViewModel.class);
+        mMostViewedViewModel = new ViewModelProvider(requireActivity()).get(MostViewedViewModel.class);
+        mTopPicksModel = new ViewModelProvider(requireActivity()).get(TopPicksModel.class);
         return view;
     }
 
@@ -116,10 +122,14 @@ public class HomeFragment extends Fragment {
             }
         });*/
         mBinding.searchItems.setOnClickListener(v -> {
-            requireActivity().getSupportFragmentManager()
+           /* requireActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment, new SearchItemsFragment())
-                    .commit();
+                    .commit();*/
+            Intent intent=new Intent(requireActivity(), SearchActivity.class);
+            startActivity(intent);
+            requireActivity().overridePendingTransition(0, 0);
+
         });
         viewModel.getCategoryModelData().observe(getViewLifecycleOwner(), images -> {
             mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -145,7 +155,7 @@ public class HomeFragment extends Fragment {
                         .commit();
             }));
         });
-        viewpagerViewModel.getViewPagerModelData().observe(getViewLifecycleOwner(), viewPagerSliderImages -> {
+        mViewpagerViewModel.getViewPagerModelData().observe(getViewLifecycleOwner(), viewPagerSliderImages -> {
            mImages = viewPagerSliderImages;
              final Handler handler = new Handler();
             Timer swipeTimer = new Timer();
@@ -164,15 +174,21 @@ public class HomeFragment extends Fragment {
             mViewPagerAdapter = new ViewPagerAdapter(getContext(), mImages);
             mBinding.viewPager.setAdapter(mViewPagerAdapter);
         });
-        dealsViewModel.getDealsModelData().observe(getViewLifecycleOwner(), dealsList -> {
+        mDealsViewModel.getDealsModelData().observe(getViewLifecycleOwner(), dealsList -> {
             mBinding.dealsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-            mBinding.dealsRecyclerView.setAdapter(new DealsRecyclerViewAdapter(dealsList, getContext(), (imageList, position) -> {
+            mBinding.dealsRecyclerView.setAdapter(new DealsRecyclerViewAdapter(dealsList, getContext(),"deals", (imageList, position) -> {
                 Toast.makeText(getContext(), "Item Clicked", Toast.LENGTH_SHORT).show();
             }));
         });
-        mostViewedViewModel.getMostViewedModelData().observe(getViewLifecycleOwner(), dealsList -> {
+        mMostViewedViewModel.getMostViewedModelData().observe(getViewLifecycleOwner(), dealsList -> {
             mBinding.mostViewedRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-            mBinding.mostViewedRecyclerView.setAdapter(new DealsRecyclerViewAdapter(dealsList, getContext(), (imageList, position) -> {
+            mBinding.mostViewedRecyclerView.setAdapter(new DealsRecyclerViewAdapter(dealsList, getContext(),"most_view" , (imageList, position) -> {
+                Toast.makeText(getContext(), "Item Clicked", Toast.LENGTH_SHORT).show();
+            }));
+        });
+        mTopPicksModel.getTopPicksModelData().observe(getViewLifecycleOwner(), dealsList -> {
+            mBinding.topPicksRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+            mBinding.topPicksRecyclerView.setAdapter(new TopPicksRecyclerViewAdapter(dealsList, getContext(),"toppicks" , (imageList, position) -> {
                 Toast.makeText(getContext(), "Item Clicked", Toast.LENGTH_SHORT).show();
             }));
         });

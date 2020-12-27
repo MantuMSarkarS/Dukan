@@ -11,11 +11,6 @@ import android.view.ViewGroup;
 import com.milkyway.dukan.R;
 import com.milkyway.dukan.activities.MainActivity;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CartFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class CartFragment extends Fragment {
 
 
