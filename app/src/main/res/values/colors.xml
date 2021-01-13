@@ -13,6 +13,7 @@
 
     <color name="colorPrimary">#fc5448</color>
     <color name="colorPrimaryDark">#00574B</color>
+    <color name="toolbar_color">#38B693</color>
 
     <color name="black_36">#363636</color>
     <color name="black_only">#000</color>

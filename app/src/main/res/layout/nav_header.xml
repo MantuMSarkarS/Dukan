@@ -2,12 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:id="@+id/nav_header_main"
-    android:layout_height="wrap_content"
+    android:layout_height="146dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_gravity="top"
-    android:padding="16dp"
-    android:background="@drawable/gradient_nav_header">
+    android:paddingTop="10dp"
+    android:paddingEnd="10dp"
+    android:paddingStart="@dimen/dimen_16dp"
+    android:background="@drawable/header_gradient">
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profiles_image"
         android:layout_width="70dp"
@@ -17,15 +19,15 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:textColor="#333C45"
+        android:text="mantu sarkar"
         android:id="@+id/user_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
         />
     <TextView
+        android:text="mantuizcool@gmail.com"
         android:id="@+id/user_email"
-        android:textColor="#333C45"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"

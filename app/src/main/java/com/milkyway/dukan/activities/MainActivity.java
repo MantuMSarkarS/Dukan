@@ -4,6 +4,7 @@ package com.milkyway.dukan.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,15 +13,11 @@ import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
-import androidx.core.widget.NestedScrollView;
 import androidx.databinding.DataBindingUtil;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
@@ -28,12 +25,11 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.milkyway.dukan.R;
 import com.milkyway.dukan.databinding.ActivityMainBinding;
-import com.milkyway.dukan.fragments.CartFragment;
-import com.milkyway.dukan.fragments.NoticationFragment;
 import com.milkyway.dukan.util.Session;
 import com.squareup.picasso.Picasso;
 
@@ -51,8 +47,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     FirebaseStorage storage;
     private StorageReference mStorageRef;
     DocumentReference reference;
-    View navView;
     ActivityMainBinding mBinding;
+    View navView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,22 +63,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getOnBackPressedDispatcher().addCallback(this, callback);
         mAuth = FirebaseAuth.getInstance();
         setupNavigation();
-        mBinding.notification.setOnClickListener(v->{
-            Toast.makeText(this, "Notification", Toast.LENGTH_SHORT).show();
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment,new NoticationFragment()).commit();
-            //navController.navigate(R.id.noticationFragment);
-        });
-        mBinding.cart.setOnClickListener(v->{
-            Toast.makeText(this, "Cart", Toast.LENGTH_SHORT).show();
-            //navController.navigate(R.id.cartFragment);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment,new CartFragment()).commit();
-            navController.removeOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
-                @Override
-                public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
-                    destination.removeAction(R.id.noticationFragment);
-                }
-            });
-        });
     }
 
     // Setting Up One Time Navigation
@@ -104,7 +84,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mStorageRef = storage.getReference();
         islandRef = mStorageRef.child("profile_images").child(userId);
         reference.addSnapshotListener(this, (value, error) -> {
-            if (value != null) {
+            if(value != null){
+                Log.d("name", "setupNavigation: "+value.getString("name"));
+                Log.d("email", "setupNavigation: "+value.getString("email"));
                 name.setText(value.getString("name"));
                 email.setText(value.getString("email"));
                 islandRef.getDownloadUrl().addOnSuccessListener(uri -> Picasso.with(getBaseContext()).load(uri)
@@ -112,6 +94,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .addOnFailureListener(exception -> Toast.makeText(this, exception.getMessage(), Toast.LENGTH_SHORT).show());
             }
         });
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu,menu);
+        mBinding.   drawerLayout.closeDrawers();
+        mBinding.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+                if(id==R.id.menu_notification){
+                    navController.navigate(R.id.noticationFragment);
+                }else if(id==R.id.menu_cart) {
+                    navController.navigate(R.id.cartFragment);
+                }
+                return false;
+            }
+        });
+        return true;
     }
 
     @Override
@@ -130,24 +132,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void setActionBarTitle(String title) {
         getSupportActionBar().setTitle(title);
-
-    }
-    public void setActionBarArrow(boolean arrow,boolean hamburger) {
-        getSupportActionBar().setDisplayShowHomeEnabled(arrow);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(hamburger);
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         menuItem.setChecked(true);
-        mBinding.drawerLayout.closeDrawers();
+        mBinding.   drawerLayout.closeDrawers();
         int id = menuItem.getItemId();
         switch (id) {
             case R.id.home:
                 navController.navigate(R.id.homeFragment);
                 break;
-            case R.id.todays_deal:
-                navController.navigate(R.id.dealsFragment);
+            case R.id.categories:
+                navController.navigate(R.id.categoryFragment);
+                break;
+            case R.id.deals:
+                navController.navigate(R.id.cartFragment);
                 break;
             case R.id.cart:
                 navController.navigate(R.id.cartFragment);
@@ -176,5 +176,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
         }
         return true;
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
 }

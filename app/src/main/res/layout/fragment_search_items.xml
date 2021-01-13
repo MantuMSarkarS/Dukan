@@ -1,14 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragments.SearchItemsFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="fragment"
+            type="com.milkyway.dukan.fragments.SearchItemsFragment" />
+    </data>
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:background="@color/white"
+        android:layout_height="match_parent">
 
-</FrameLayout>
+        <!-- TODO: Update blank fragment layout -->
+        <LinearLayout
+            android:elevation="@dimen/dimen_10dp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_50dp"
+            android:layout_gravity="center|top"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_marginStart="@dimen/dimen_10dp"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/search"
+                android:layout_gravity="center"
+                android:contentDescription="TODO" />
+            <EditText
+                android:id="@+id/search_items"
+                android:layout_marginStart="@dimen/dimen_15dp"
+                android:layout_weight="55"
+                android:maxLines="1"
+                android:layout_width="match_parent"
+                android:background="@android:color/transparent"
+                android:layout_height="wrap_content"
+                android:text="@string/search_for_product_brand_and_more"
+                android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/dimen_20dp"/>
+             <ImageView
+                 android:layout_gravity="center"
+                 android:layout_weight="1"
+                 android:layout_marginEnd="@dimen/dimen_10dp"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:src="@drawable/ic_baseline_close_24"/>
+        </LinearLayout>
+
+    </FrameLayout>
+</layout>
