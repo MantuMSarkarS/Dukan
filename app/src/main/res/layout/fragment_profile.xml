@@ -46,15 +46,14 @@
                     <androidx.cardview.widget.CardView
                         android:layout_width="120dp"
                         android:layout_height="120dp"
-                        android:background="#fff"
-                        app:cardCornerRadius="6dp"
+                        app:cardCornerRadius="60dp"
                         app:cardElevation="0dp">
 
                         <RelativeLayout
                             android:layout_width="120dp"
                             android:layout_height="120dp"
                             android:layout_gravity="center_horizontal"
-                            android:background="#fff">
+                           >
 
                             <de.hdodenhof.circleimageview.CircleImageView
                                 android:id="@+id/profile_image"
@@ -62,33 +61,31 @@
                                 android:layout_height="120dp"
                                 android:layout_centerInParent="true"
                                 android:scaleType="centerCrop"
-                                android:src="@drawable/profile"
+                                android:src="@drawable/icon"
                                 app:civ_border_color="#AFAAAA"
-                                app:civ_border_width="1dp"
+                                app:civ_border_width=".3dp"
                                 app:civ_circle_background_color="@color/white_second" />
 
 
-                            <de.hdodenhof.circleimageview.CircleImageView
-                                android:id="@+id/camera"
-                                android:layout_width="25dp"
-                                android:layout_height="25dp"
-                                android:layout_alignParentRight="true"
-                                android:layout_alignParentBottom="true"
-                                android:layout_marginStart="11dp"
-                                android:layout_marginTop="11dp"
-                                android:layout_marginEnd="3dp"
-                                android:layout_marginBottom="3dp"
-                                android:src="@drawable/camera"
-                                app:civ_border_color="#AFAAAA"
-                                app:civ_border_width="1dp"
-                                app:civ_circle_background_color="@color/color_white" />
+
 
 
                         </RelativeLayout>
 
 
                     </androidx.cardview.widget.CardView>
-
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/camera"
+                        android:layout_marginTop="-20dp"
+                        android:layout_marginStart="@dimen/dimen_34dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentBottom="true"
+                        android:src="@drawable/camera"
+                        app:civ_border_color="#AFAAAA"
+                        app:civ_border_width=".3dp"
+                        app:civ_circle_background_color="@color/color_white" />
                     <TextView
                         android:id="@+id/upload"
                         android:layout_width="wrap_content"
