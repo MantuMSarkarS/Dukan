@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -121,6 +123,42 @@ public class LoginFragment extends Fragment {
             login();
         });
         mBinding.newUserText.setOnClickListener(v -> requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameContainer, new RegisterFragment()).commit());
+        mBinding.email.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length()>0){
+                    mBinding.usernameLay.setError(null);
+                }
+            }
+        });
+        mBinding.password.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length()>0){
+                    mBinding.passwordLay.setError(null);
+                }
+            }
+        });
        // mBinding.facebookLogin.setOnClickListener(v -> facebookLogin());
        // mBinding.googleLogin.setOnClickListener(v -> signInWithGoogle());
 
@@ -134,12 +172,12 @@ public class LoginFragment extends Fragment {
         mEmail = mBinding.email.getText().toString().trim();
         mPassword = mBinding.password.getText().toString().trim();
         if (TextUtils.isEmpty(mEmail)) {
-            mBinding.email.setError("Email is Required.");
+            mBinding.usernameLay.setError("Email is Required.");
             mBinding.email.requestFocus();
             return;
         }
         if (TextUtils.isEmpty(mPassword)) {
-            mBinding.password.setError("Password is Required.");
+            mBinding.passwordLay.setError("Password is Required.");
             mBinding.password.requestFocus();
             return;
         }

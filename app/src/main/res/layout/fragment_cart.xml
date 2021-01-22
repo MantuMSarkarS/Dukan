@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
 
@@ -12,8 +11,23 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/cart"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your cart is empty"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/cart_value_lay"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -22,13 +36,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:elevation="@dimen/dimen_10dp"
+                android:elevation="@dimen/dimen_5dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -54,21 +68,21 @@
                             android:textColor="@color/black" />
 
                         <TextView
-                            android:fontFamily="@font/source_sans_pro_light"
                             android:id="@+id/address_type"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/dimen_10dp"
                             android:background="#9FFFFFFF"
+                            android:fontFamily="@font/source_sans_pro_light"
                             android:padding="@dimen/dimen_5dp"
                             android:text="HOME" />
                     </LinearLayout>
 
                     <TextView
-                        android:fontFamily="@font/source_sans_pro_light"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/dimen_10dp"
+                        android:fontFamily="@font/source_sans_pro_light"
                         android:text="113, Kaliput,Kailashahar" />
                 </LinearLayout>
 
@@ -101,7 +115,6 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/cart_items_recycler_view"
                         android:layout_width="match_parent"
-                        tools:listitem="@layout/cart_view_row"
                         android:layout_height="wrap_content" />
 
                     <LinearLayout
@@ -111,7 +124,7 @@
                         android:layout_marginTop="@dimen/dimen_10dp"
                         android:layout_marginBottom="@dimen/dimen_10dp"
                         android:background="@color/white"
-                        android:elevation="@dimen/dimen_10dp"
+                        android:elevation="@dimen/dimen_5dp"
                         android:orientation="vertical">
 
                         <TextView
@@ -122,10 +135,10 @@
                             android:textColor="@color/black_36" />
 
                         <View
-                            android:fontFamily="@font/source_sans_pro_light"
                             android:layout_width="match_parent"
                             android:layout_height=".3dp"
-                            android:background="@color/goodgrey" />
+                            android:background="@color/goodgrey"
+                            android:fontFamily="@font/source_sans_pro_light" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -136,9 +149,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="6"
+                                android:fontFamily="@font/source_sans_pro_light"
                                 android:padding="@dimen/dimen_3dp"
                                 android:text="Price "
-                                android:fontFamily="@font/source_sans_pro_light"
                                 android:textColor="@color/black_36" />
 
                             <TextView
@@ -162,10 +175,10 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:fontFamily="@font/source_sans_pro_light"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="6"
+                                android:fontFamily="@font/source_sans_pro_light"
                                 android:padding="@dimen/dimen_3dp"
                                 android:text="Discount"
                                 android:textColor="@color/black_36" />
@@ -191,10 +204,10 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:fontFamily="@font/source_sans_pro_light"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="6"
+                                android:fontFamily="@font/source_sans_pro_light"
                                 android:padding="@dimen/dimen_3dp"
                                 android:text="Delivery Charges"
                                 android:textColor="@color/black_36" />
@@ -214,11 +227,35 @@
                                 android:textColor="@color/black_36" />
                         </LinearLayout>
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="6"
+                                android:fontFamily="@font/source_sans_pro_light"
+                                android:padding="@dimen/dimen_3dp"
+                                android:text="Coupon Discount"
+                                android:textColor="@color/black_36" />
+
+                            <TextView
+                                android:id="@+id/apply_coupon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/source_sans_pro_light"
+                                android:text="Apply Coupon "
+                                android:textColor="#FB4646" />
+
+                        </LinearLayout>
+
                         <View
-                            android:fontFamily="@font/source_sans_pro_light"
                             android:layout_width="match_parent"
                             android:layout_height=".3dp"
-                            android:background="@color/goodgrey" />
+                            android:background="@color/goodgrey"
+                            android:fontFamily="@font/source_sans_pro_light" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -247,32 +284,99 @@
                                 android:text="1,245 "
                                 android:textColor="@color/black_36" />
                         </LinearLayout>
+
                         <View
-                            android:fontFamily="@font/source_sans_pro_light"
                             android:layout_width="match_parent"
                             android:layout_height=".3dp"
-                            android:background="@color/goodgrey" />
+                            android:background="@color/goodgrey"
+                            android:fontFamily="@font/source_sans_pro_light" />
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
                             <TextView
-                                android:fontFamily="@font/source_sans_pro_light"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:fontFamily="@font/source_sans_pro_light"
                                 android:padding="@dimen/dimen_5dp"
                                 android:text="You have saved ₹"
                                 android:textColor="#0B7BAE" />
 
                             <TextView
-                                android:fontFamily="@font/source_sans_pro_light"
                                 android:id="@+id/saved_amount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="@dimen/dimen_10dp"
+                                android:fontFamily="@font/source_sans_pro_light"
                                 android:text="1,245 "
                                 android:textColor="#0B7BAE" />
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_margin="@dimen/dimen_10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <ImageView
+                                android:layout_gravity="center"
+                                android:src="@drawable/genuine"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                />
+                            <TextView
+                                android:textSize="@dimen/dimen_8sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Genuine Products"/>
+                        </LinearLayout>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/black_dot"/>
+                        <LinearLayout
+                            android:layout_margin="@dimen/dimen_10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <ImageView
+                                android:src="@drawable/contact_less"
+                                android:layout_gravity="center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                />
+                            <TextView
+                                android:textSize="@dimen/dimen_8sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Contactless Delivery"/>
+                        </LinearLayout>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/black_dot"/>
+                        <LinearLayout
+                            android:layout_margin="@dimen/dimen_10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <ImageView
+                                android:layout_gravity="center"
+                                android:src="@drawable/secure_payments"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                />
+                            <TextView
+                                android:textSize="@dimen/dimen_8sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Secure Payments"/>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -329,7 +433,10 @@
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/dimen_5dp"
                     android:padding="@dimen/dimen_5dp"
+                    android:textSize="@dimen/dimen_16sp"
                     android:text="Buy now"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/source_sans_pro_light"
                     android:textAllCaps="false" />
             </LinearLayout>
 

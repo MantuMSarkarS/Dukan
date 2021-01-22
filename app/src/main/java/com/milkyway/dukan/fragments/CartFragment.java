@@ -49,7 +49,7 @@ public class CartFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((MainActivity) requireActivity()).setActionBarTitle("My Cart1");
+        ((MainActivity) requireActivity()).setActionBarTitle("My Cart");
         //((MainActivity) requireActivity()).setActionBarArrow(true,false);
             ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

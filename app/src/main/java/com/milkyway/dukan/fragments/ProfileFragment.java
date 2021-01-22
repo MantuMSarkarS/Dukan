@@ -1,89 +1,57 @@
 package com.milkyway.dukan.fragments;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
-import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.os.Handler;
-import android.provider.MediaStore;
-import android.util.Base64;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.milkyway.dukan.R;
-import com.milkyway.dukan.activities.ImageCropActivity;
 import com.milkyway.dukan.activities.MainActivity;
-import com.milkyway.dukan.databinding.FragmentLoginBinding;
 import com.milkyway.dukan.databinding.FragmentProfileBinding;
 import com.milkyway.dukan.util.ImageUtil;
 import com.milkyway.dukan.util.Session;
 import com.squareup.picasso.Picasso;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.yalantis.ucrop.UCrop;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.Executor;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -141,6 +109,7 @@ public class ProfileFragment extends Fragment {
         islandRef.getDownloadUrl().addOnSuccessListener(uri -> Picasso.with(getContext()).load(uri).placeholder(R.drawable.profile)
                 .error(R.drawable.profile).fit().centerCrop().into(mBinding.profileImage))
                 .addOnFailureListener(exception -> Toast.makeText(getContext(), exception.getMessage(), Toast.LENGTH_SHORT).show());
+
         return view;
     }
 
@@ -158,7 +127,9 @@ public class ProfileFragment extends Fragment {
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                navController.navigate(R.id.action_profileFragment_to_homeFragment);
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                startActivity(intent);
+                getActivity().overridePendingTransition(0, 0);
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(requireActivity(), callback);
@@ -183,10 +154,11 @@ public class ProfileFragment extends Fragment {
             byte[] data = baos.toByteArray();
 
             UploadTask uploadTask = islandRef.putBytes(data);
-            uploadTask.addOnFailureListener(exception -> {
-                Toast.makeText(getContext(), exception.getMessage(), Toast.LENGTH_SHORT).show();
-                progressDialog.dismiss();
-            })
+            uploadTask
+                    .addOnFailureListener(exception -> {
+                        Toast.makeText(getContext(), exception.getMessage(), Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                    })
                     .addOnSuccessListener(taskSnapshot -> {
                         mBinding.upload.setVisibility(View.GONE);
                         progressDialog.dismiss();
@@ -402,6 +374,7 @@ public class ProfileFragment extends Fragment {
     public void onResume() {
         super.onResume();
         ((MainActivity) requireActivity()).setActionBarTitle("Profile");
+
         alertDialog = new AlertDialog.Builder(getContext());
         alertDialog.setCancelable(false);
         alertDialog.setTitle("No Internet Connection");
