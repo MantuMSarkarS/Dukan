@@ -34,7 +34,7 @@
                 android:layout_marginTop="@dimen/dimen_10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="No notification yet"
+                android:text="@string/no_notification_yet"
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:textSize="@dimen/dimen_18sp"/>
@@ -42,7 +42,7 @@
                 android:layout_marginTop="@dimen/dimen_10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Browse your item, make a purchase"
+                android:text="@string/browse_your_item_make_a_purchase"
                 android:gravity="center"
                 android:textSize="@dimen/dimen_16sp"/>
             <Button
@@ -52,7 +52,7 @@
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Continue Shopping"/>
+                android:text="@string/continue_shopping"/>
         </LinearLayout>
     </FrameLayout>
 </layout>

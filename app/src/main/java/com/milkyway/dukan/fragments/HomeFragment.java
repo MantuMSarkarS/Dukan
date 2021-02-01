@@ -27,6 +27,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.milkyway.dukan.R;
 import com.milkyway.dukan.activities.MainActivity;
 import com.milkyway.dukan.activities.SearchActivity;
+import com.milkyway.dukan.activities.ViewProductActivity;
 import com.milkyway.dukan.adapters.CategoryRecyclerViewAdapter;
 import com.milkyway.dukan.adapters.DealsRecyclerViewAdapter;
 import com.milkyway.dukan.adapters.TopPicksRecyclerViewAdapter;
@@ -141,67 +142,100 @@ public class HomeFragment extends Fragment {
             requireActivity().overridePendingTransition(0, 0);
 
         });
+        mBinding.progressBar.setVisibility(View.VISIBLE);
         viewModel.getCategoryModelData().observe(getViewLifecycleOwner(), images -> {
-            mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-            mBinding.recyclerView.setAdapter(new CategoryRecyclerViewAdapter(images, getContext(), "", (imageList, position) -> {
-                mCategoryId = images.get(position).getCategoryId();
-                CategoryFragment fragment = new CategoryFragment();
-                Bundle bundle = new Bundle();
-                if (mCategoryId.equals("AC")) {
-                    bundle.putString("categoryId", "AC");
-                } else if (mCategoryId.equals("AP")) {
-                    bundle.putString("categoryId", "AP");
-                } else if (mCategoryId.equals("EC")) {
-                    bundle.putString("categoryId", "EC");
-                } else if (mCategoryId.equals("FD")) {
-                    bundle.putString("categoryId", "FD");
-                } else if (mCategoryId.equals("FS")) {
-                    bundle.putString("categoryId", "FS");
-                }
-                fragment.setArguments(bundle);
-                requireActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment, fragment)
-                        .commit();
-            }));
+            if(images!=null){
+                mBinding.recyclerView.setVisibility(View.VISIBLE);
+                mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+                mBinding.recyclerView.setAdapter(new CategoryRecyclerViewAdapter(images, getContext(), "", (imageList, position) -> {
+                    mCategoryId = images.get(position).getCategoryId();
+                    CategoryFragment fragment = new CategoryFragment();
+                    Bundle bundle = new Bundle();
+                    if (mCategoryId.equals("AC")) {
+                        bundle.putString("categoryId", "AC");
+                    } else if (mCategoryId.equals("AP")) {
+                        bundle.putString("categoryId", "AP");
+                    } else if (mCategoryId.equals("EC")) {
+                        bundle.putString("categoryId", "EC");
+                    } else if (mCategoryId.equals("FD")) {
+                        bundle.putString("categoryId", "FD");
+                    } else if (mCategoryId.equals("FS")) {
+                        bundle.putString("categoryId", "FS");
+                    }
+                    fragment.setArguments(bundle);
+                    requireActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment, fragment)
+                            .commit();
+                }));
+            }
         });
         mViewpagerViewModel.getViewPagerModelData().observe(getViewLifecycleOwner(), viewPagerSliderImages -> {
-           mImages = viewPagerSliderImages;
-             final Handler handler = new Handler();
-            Timer swipeTimer = new Timer();
-            final Runnable Update = () -> {
-                if (currentPage == Integer.MAX_VALUE) {
-                    currentPage = 0;
-                }
-                mBinding.viewPager.setCurrentItem(currentPage++, true);
-            };
-            swipeTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    handler.post(Update);
-                }
-            }, 500, 3000);
-            mViewPagerAdapter = new ViewPagerAdapter(getContext(), mImages);
-            mBinding.viewPager.setAdapter(mViewPagerAdapter);
+            if (viewPagerSliderImages!=null){
+                mBinding.viewPager.setVisibility(View.VISIBLE);
+                mImages = viewPagerSliderImages;
+                final Handler handler = new Handler();
+                Timer swipeTimer = new Timer();
+                final Runnable Update = () -> {
+                    if (currentPage == Integer.MAX_VALUE) {
+                        currentPage = 0;
+                    }
+                    mBinding.viewPager.setCurrentItem(currentPage++, true);
+                };
+                swipeTimer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        handler.post(Update);
+                    }
+                }, 500, 3000);
+                mViewPagerAdapter = new ViewPagerAdapter(getContext(), mImages);
+                mBinding.viewPager.setAdapter(mViewPagerAdapter);
+            }
+
         });
         mDealsViewModel.getDealsModelData().observe(getViewLifecycleOwner(), dealsList -> {
-            mBinding.dealsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-            mBinding.dealsRecyclerView.setAdapter(new DealsRecyclerViewAdapter(dealsList, getContext(),"deals", (imageList, position) -> {
-                Toast.makeText(getContext(), "Item Clicked", Toast.LENGTH_SHORT).show();
-            }));
+            if(dealsList!=null){
+                mBinding.dealsTitle.setVisibility(View.VISIBLE);
+                mBinding.dealsLay.setVisibility(View.VISIBLE);
+                mBinding.dealsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+                mBinding.dealsRecyclerView.setAdapter(new DealsRecyclerViewAdapter(dealsList, getContext(),"deals", (imageList, position) -> {
+                    Intent intent=new Intent(requireActivity(), ViewProductActivity.class);
+                    intent.putExtra("product_id",imageList.getModelid());
+                    startActivity(intent);
+                    requireActivity().overridePendingTransition(0, 0);
+                }));
+                mMostViewedViewModel.getMostViewedModelData().observe(getViewLifecycleOwner(), mostViewList -> {
+                    if (mostViewList!=null){
+                        mBinding.mostViewTitle.setVisibility(View.VISIBLE);
+                        mBinding.mostViewLay.setVisibility(View.VISIBLE);
+                        mBinding.mostViewedRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+                        mBinding.mostViewedRecyclerView.setAdapter(new DealsRecyclerViewAdapter(mostViewList, getContext(),"most_view" , (imageList, position) -> {
+                            Intent intent=new Intent(requireActivity(), ViewProductActivity.class);
+                            intent.putExtra("product_id",mostViewList.get(position).getModelid()    );
+                            startActivity(intent);
+                            requireActivity().overridePendingTransition(0, 0);
+                        }));
+                        mTopPicksModel.getTopPicksModelData().observe(getViewLifecycleOwner(), topPicksList -> {
+                            if (topPicksList!=null){
+                                mBinding.progressBar.setVisibility(View.GONE);
+                                mBinding.topPickTitle.setVisibility(View.VISIBLE);
+                                mBinding.topPickLay.setVisibility(View.VISIBLE);
+                                mBinding.topPicksRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+                                mBinding.topPicksRecyclerView.setAdapter(new TopPicksRecyclerViewAdapter(topPicksList, getContext(),"toppicks" , (imageList, position) -> {
+                                    Intent intent=new Intent(requireActivity(), ViewProductActivity.class);
+                                    intent.putExtra("product_id",topPicksList.get(position).getModelid());
+                                    startActivity(intent);
+                                    requireActivity().overridePendingTransition(0, 0);
+                                }));
+                            }
+                        });
+                    }
+                });
+            }
+
         });
-        mMostViewedViewModel.getMostViewedModelData().observe(getViewLifecycleOwner(), dealsList -> {
-            mBinding.mostViewedRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-            mBinding.mostViewedRecyclerView.setAdapter(new DealsRecyclerViewAdapter(dealsList, getContext(),"most_view" , (imageList, position) -> {
-                Toast.makeText(getContext(), "Item Clicked", Toast.LENGTH_SHORT).show();
-            }));
-        });
-        mTopPicksModel.getTopPicksModelData().observe(getViewLifecycleOwner(), dealsList -> {
-            mBinding.topPicksRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-            mBinding.topPicksRecyclerView.setAdapter(new TopPicksRecyclerViewAdapter(dealsList, getContext(),"toppicks" , (imageList, position) -> {
-                Toast.makeText(getContext(), "Item Clicked", Toast.LENGTH_SHORT).show();
-            }));
-        });
+
+
         /*FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override

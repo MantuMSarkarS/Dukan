@@ -7,19 +7,26 @@
     android:background="@color/white">
 
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/deals_row"
         android:layout_width="@dimen/dimen_200dp"
         android:layout_height="@dimen/dimen_250dp"
         android:orientation="vertical"
-        android:visibility="gone"
         tools:ignore="MissingConstraints">
-
+        <ImageView
+            android:id="@+id/deals_wish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|right"
+            android:padding="@dimen/dimen_8dp"
+            android:src="@drawable/wish_list"
+            tools:ignore="MissingConstraints" />
         <ImageView
             android:id="@+id/dealsImage"
             android:layout_width="@dimen/dimen_100dp"
             android:layout_height="@dimen/dimen_140dp"
             android:layout_gravity="center"
-            android:layout_margin="@dimen/dimen_10dp"
+            android:layout_marginTop="-20dp"
             android:src="@drawable/splash_logo"
             tools:ignore="MissingConstraints" />
 
@@ -100,20 +107,27 @@
     </LinearLayout>
 
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/most_view_row"
         android:layout_width="@dimen/dimen_170dp"
         android:layout_height="@dimen/dimen_210dp"
         android:background="#9AE7EAF1"
         android:orientation="vertical"
-        android:visibility="gone"
         tools:ignore="MissingConstraints">
-
+        <ImageView
+            android:id="@+id/most_view_wish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|right"
+            android:padding="@dimen/dimen_8dp"
+            android:src="@drawable/wish_list"
+            tools:ignore="MissingConstraints" />
         <ImageView
             android:id="@+id/most_view_Image"
             android:layout_width="@dimen/dimen_100dp"
             android:layout_height="@dimen/dimen_140dp"
             android:layout_gravity="center"
-            android:layout_margin="@dimen/dimen_10dp"
+            android:layout_marginTop="-20dp"
             android:src="@drawable/splash_logo"
             tools:ignore="MissingConstraints" />
 
@@ -251,13 +265,20 @@
             android:background="#9AE7EAF1"
             android:orientation="vertical"
             tools:ignore="MissingConstraints">
-
+            <ImageView
+                android:id="@+id/top_pick_wish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|right"
+                android:padding="@dimen/dimen_8dp"
+                android:src="@drawable/wish_list"
+                tools:ignore="MissingConstraints" />
             <ImageView
                 android:id="@+id/top_pick_Image"
                 android:layout_width="@dimen/dimen_140dp"
                 android:layout_height="@dimen/dimen_140dp"
                 android:layout_gravity="center"
-                android:layout_margin="@dimen/dimen_10dp"
+                android:layout_marginTop="-20dp"
                 android:src="@drawable/splash_logo"
                 tools:ignore="MissingConstraints" />
 

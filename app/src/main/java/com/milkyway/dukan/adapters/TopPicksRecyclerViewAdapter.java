@@ -56,11 +56,14 @@ public class TopPicksRecyclerViewAdapter extends RecyclerView.Adapter<TopPicksRe
                 holder.mTopPicksRupeeSymbol.setVisibility(View.GONE);
             }
             Picasso.with(mContext).load(response.getImage()).placeholder(R.drawable.icon).error(R.drawable.icon).into(holder.mTopPicksImage);
+            holder.mTopPicksRow.setOnClickListener(v->{
+                mListener.onItemClick(response,position);
+            });
         }
     }
 
     public interface OnItemClickListener {
-        void onItemClick(SliderImage imageList, int position);
+        void onItemClick(TopPicksResponse response, int position);
     }
 
     @Override

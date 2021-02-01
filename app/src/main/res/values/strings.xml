@@ -19,5 +19,8 @@
     <string name="help_center">Help Center</string>
     <string name="search_for_product_brand_and_more">Search for Product, Brand and More</string>
     <string name="see_more_amp_manage"><![CDATA[See more & manage]]></string>
+    <string name="no_notification_yet">No notification yet</string>
+    <string name="browse_your_item_make_a_purchase">Browse your item, make a purchase</string>
+    <string name="continue_shopping">Continue Shopping</string>
 
 </resources>
