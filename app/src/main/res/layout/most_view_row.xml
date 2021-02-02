@@ -50,7 +50,7 @@
                 android:layout_marginStart="@dimen/dimen_10dp"
                 android:fontFamily="@font/source_sans_pro_light"
                 android:padding="@dimen/dimen_5dp"
-                android:text="र 7,999"
+                android:text="₹ 7,999"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/dimen_18sp" />
 
@@ -62,7 +62,7 @@
                 android:fontFamily="@font/source_sans_pro_light"
                 android:foreground="@drawable/strike"
                 android:padding="@dimen/dimen_5dp"
-                android:text="र 7,999"
+                android:text="₹ 7,999"
                 android:textSize="@dimen/dimen_11sp" />
         </LinearLayout>
 

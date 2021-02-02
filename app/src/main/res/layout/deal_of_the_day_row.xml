@@ -41,7 +41,7 @@
                 android:layout_marginStart="@dimen/dimen_10dp"
                 android:fontFamily="@font/source_sans_pro_light"
                 android:padding="@dimen/dimen_5dp"
-                android:text="र"
+                android:text="₹"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/dimen_18sp" />
 
@@ -69,7 +69,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/source_sans_pro_light"
-                    android:text="र"
+                    android:text="₹"
                     android:textSize="@dimen/dimen_12sp" />
 
                 <TextView
@@ -167,7 +167,7 @@
                 android:layout_marginStart="@dimen/dimen_10dp"
                 android:fontFamily="@font/source_sans_pro_light"
                 android:padding="@dimen/dimen_5dp"
-                android:text="र"
+                android:text="₹"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/dimen_18sp" />
 
@@ -194,7 +194,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/source_sans_pro_light"
-                    android:text="र"
+                    android:text="₹"
                     android:textSize="@dimen/dimen_12sp" />
 
                 <TextView
@@ -306,7 +306,7 @@
                     android:layout_marginStart="@dimen/dimen_10dp"
                     android:fontFamily="@font/source_sans_pro_light"
                     android:padding="@dimen/dimen_5dp"
-                    android:text="र"
+                    android:text="₹"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/dimen_18sp" />
 
@@ -333,7 +333,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/source_sans_pro_light"
-                        android:text="र"
+                        android:text="₹"
                         android:textSize="@dimen/dimen_12sp" />
 
                     <TextView
