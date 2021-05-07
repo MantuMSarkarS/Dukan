@@ -132,6 +132,13 @@ public class HomeFragment extends Fragment {
                 System.out.println("End of NestedScrollView 1");
             }
         });*/
+        mBinding.allDeals.setOnClickListener(view->{
+            ViewProductListFragment fragment = new ViewProductListFragment();
+            Bundle bundle = new Bundle();
+
+            fragment.setArguments(bundle);
+            getChildFragmentManager().beginTransaction().replace(R.id.mainContainer,new ViewProductListFragment()).commit();
+        });
         mBinding.searchItems.setOnClickListener(v -> {
            /* requireActivity().getSupportFragmentManager()
                     .beginTransaction()

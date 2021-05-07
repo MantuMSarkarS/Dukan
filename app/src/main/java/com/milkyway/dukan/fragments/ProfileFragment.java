@@ -106,7 +106,7 @@ public class ProfileFragment extends Fragment {
             mBinding.address.setText(value.getString("address"));
         });
 
-        islandRef.getDownloadUrl().addOnSuccessListener(uri -> Picasso.with(getContext()).load(uri).placeholder(R.drawable.profile)
+        islandRef.getDownloadUrl().addOnSuccessListener(uri -> Picasso.get().load(uri).placeholder(R.drawable.profile)
                 .error(R.drawable.profile).fit().centerCrop().into(mBinding.profileImage))
                 .addOnFailureListener(exception -> Toast.makeText(getContext(), exception.getMessage(), Toast.LENGTH_SHORT).show());
 
@@ -162,7 +162,7 @@ public class ProfileFragment extends Fragment {
                     .addOnSuccessListener(taskSnapshot -> {
                         mBinding.upload.setVisibility(View.GONE);
                         progressDialog.dismiss();
-                        Picasso.with(getContext()).load(filePath).into(mBinding.profileImage);
+                        Picasso.get().load(filePath).into(mBinding.profileImage);
                         Toast.makeText(getContext(), "Uploading Done", Toast.LENGTH_SHORT).show();
                     })
                     .addOnProgressListener(snapshot -> {
@@ -188,7 +188,7 @@ public class ProfileFragment extends Fragment {
             myDialog.setContentView(R.layout.popup_picture);
             ImageView ivClose = myDialog.findViewById(R.id.ivClose);
             ImageView image = myDialog.findViewById(R.id.image);
-            islandRef.getDownloadUrl().addOnSuccessListener(uri -> Picasso.with(getContext()).load(String.valueOf(uri)).error(R.drawable.profile).into(image))
+            islandRef.getDownloadUrl().addOnSuccessListener(uri -> Picasso.get().load(String.valueOf(uri)).error(R.drawable.profile).into(image))
                     .addOnFailureListener(exception -> Toast.makeText(getContext(), exception.getMessage(), Toast.LENGTH_SHORT).show());
             ivClose.setOnClickListener(view1 -> myDialog.dismiss());
             Objects.requireNonNull(myDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -327,7 +327,7 @@ public class ProfileFragment extends Fragment {
         if (resultCode == RESULT_OK) {
             if (requestCode == PICK_PHOTO_FOR_AVATAR && data != null && data.getData() != null) {
                 filePath = data.getData();
-                Picasso.with(getActivity()).load(filePath).error(R.drawable.profile_p).into(mBinding.profileImage);
+                Picasso.get().load(filePath).error(R.drawable.profile_p).into(mBinding.profileImage);
             }
         }
     }

@@ -55,7 +55,7 @@ public class TopPicksRecyclerViewAdapter extends RecyclerView.Adapter<TopPicksRe
             if (response.getOldPrice().equals("") || response.getOldPrice().isEmpty()) {
                 holder.mTopPicksRupeeSymbol.setVisibility(View.GONE);
             }
-            Picasso.with(mContext).load(response.getImage()).placeholder(R.drawable.icon).error(R.drawable.icon).into(holder.mTopPicksImage);
+            Picasso.get().load(response.getImage()).placeholder(R.drawable.icon).error(R.drawable.icon).into(holder.mTopPicksImage);
             holder.mTopPicksRow.setOnClickListener(v->{
                 mListener.onItemClick(response,position);
             });

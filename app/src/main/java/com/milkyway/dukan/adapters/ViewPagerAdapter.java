@@ -50,16 +50,17 @@ public class ViewPagerAdapter extends PagerAdapter {
         View items=mLayoutInflater.inflate(R.layout.item,container,false);
         ImageView imageView=items.findViewById(R.id.imageViewMain);
 
-        Picasso.with(mContext).load(image.getImage()).placeholder(R.drawable.icon).error(R.drawable.icon).into(new Target() {
+        Picasso.get().load(image.getImage()).placeholder(R.drawable.icon).error(R.drawable.icon).into(new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                 imageView.setImageBitmap(bitmap);
             }
 
             @Override
-            public void onBitmapFailed(Drawable errorDrawable) {
+            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
 
             }
+
 
             @Override
             public void onPrepareLoad(Drawable placeHolderDrawable) {

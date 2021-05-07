@@ -36,6 +36,9 @@
         <action
             android:id="@+id/action_homeFragment_to_dealsFragment"
             app:destination="@id/dealsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_viewProductListFragment"
+            app:destination="@id/viewProductListFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -118,6 +121,15 @@
         tools:layout="@layout/fragment_deals" >
         <action
             android:id="@+id/action_dealsFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewProductListFragment"
+        android:name="com.milkyway.dukan.fragments.ViewProductListFragment"
+        android:label="fragment_view_product_list"
+        tools:layout="@layout/fragment_view_product_list" >
+        <action
+            android:id="@+id/action_viewProductListFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
 </navigation>

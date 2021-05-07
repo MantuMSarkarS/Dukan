@@ -1,6 +1,7 @@
 package com.milkyway.dukan.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -43,12 +44,14 @@ import java.util.Objects;
 public class CategoryFragment extends Fragment {
 
 
+    public CategoryFragment() {
+    }
 
-    public CategoryFragment() { }
     FragmentCategoryBinding mBinding;
     String mCategoryId;
     Session session;
     CategoryDetailsViewModel viewModel;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -64,68 +67,75 @@ public class CategoryFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mBinding.backButton.setOnClickListener(v->{
-            requireActivity().getSupportFragmentManager()
+        mBinding.backButton.setOnClickListener(v -> {
+           /* requireActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment, new HomeFragment())
-                    .commit();
+                    .commit();*/
+            startActivity(new Intent(getActivity(), MainActivity.class));
+            requireActivity().finish();
+            requireActivity().overridePendingTransition(0, 0);
         });
 
-        Bundle bundle=this.getArguments();
-        if(bundle != null){
-            mCategoryId=bundle.getString("categoryId");
-            if(mCategoryId.equals("AC")){
-               mBinding.categoryTitle.setText("All Categories");
-            }else if(mCategoryId.equals("AP")){
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            mCategoryId = bundle.getString("categoryId");
+            if (mCategoryId.equals("AC")) {
+                mBinding.categoryTitle.setText("All Categories");
+            } else if (mCategoryId.equals("AP")) {
                 mBinding.categoryTitle.setText("Appliances");
-            }else if(mCategoryId.equals("EC")){
+            } else if (mCategoryId.equals("EC")) {
                 mBinding.categoryTitle.setText("Electronics");
-            }else if(mCategoryId.equals("FD")){
+            } else if (mCategoryId.equals("FD")) {
                 mBinding.categoryTitle.setText("Food");
-            }else if(mCategoryId.equals("FS")){
+            } else if (mCategoryId.equals("FS")) {
                 mBinding.categoryTitle.setText("Fashion");
             }
         }
+        if (mCategoryId.equals("AC")) {
+            viewModel.getCategoryModelData().observe(getViewLifecycleOwner(), images -> {
+                mBinding.recyclerViewList.setLayoutManager(new GridLayoutManager(getContext(), 3));
+                CategoryRecyclerViewAdapter adapter = new CategoryRecyclerViewAdapter(images, getContext(), "category", (imageList, position) -> {
+                    mCategoryId = images.get(position).getCategoryId();
+                    CategoryFragment fragment = new CategoryFragment();
+                    Bundle bundle1 = new Bundle();
+                    if (mCategoryId.equals("AC")) {
+                        bundle1.putString("categoryId", "AC");
+                    } else if (mCategoryId.equals("AP")) {
+                        bundle1.putString("categoryId", "AP");
+                    } else if (mCategoryId.equals("EC")) {
+                        bundle1.putString("categoryId", "EC");
+                    } else if (mCategoryId.equals("FD")) {
+                        bundle1.putString("categoryId", "FD");
+                    } else if (mCategoryId.equals("FS")) {
+                        bundle1.putString("categoryId", "FS");
+                    }
+                    fragment.setArguments(bundle1);
+                    requireActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment, fragment)
+                            .commit();
+                });
+                adapter.notifyDataSetChanged();
+                mBinding.recyclerViewList.setAdapter(adapter);
 
-        viewModel.getCategoryModelData().observe(getViewLifecycleOwner(), images -> {
-           mBinding.recyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
-            CategoryRecyclerViewAdapter adapter=new CategoryRecyclerViewAdapter(images, getContext(),"category", (imageList, position) -> {
-                mCategoryId = images.get(position).getCategoryId();
-                CategoryFragment fragment=new CategoryFragment();
-                Bundle bundle1 =new Bundle();
-                if(mCategoryId.equals("AC")){
-                    bundle1.putString("categoryId","AC");
-                }else if(mCategoryId.equals("AP")){
-                    bundle1.putString("categoryId","AP");
-                }else if(mCategoryId.equals("EC")){
-                    bundle1.putString("categoryId","EC");
-                }else if(mCategoryId.equals("FD")){
-                    bundle1.putString("categoryId","FD");
-                }else if(mCategoryId.equals("FS")){
-                    bundle1.putString("categoryId","FS");
-                }
-                fragment.setArguments(bundle1);
-                requireActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment, fragment)
-                        .commit();
             });
-            adapter.notifyDataSetChanged();
-            mBinding.recyclerView.setAdapter(adapter);
+        } else {
 
-        });
+        }
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().hide();
     }
+
     @Override
     public void onStop() {
         super.onStop();
-        ((AppCompatActivity)getActivity()).getSupportActionBar().show();
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().show();
     }
 
 }

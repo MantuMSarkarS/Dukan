@@ -89,8 +89,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Log.d("email", "setupNavigation: "+value.getString("email"));
                 name.setText(value.getString("name"));
                 email.setText(value.getString("email"));
-                islandRef.getDownloadUrl().addOnSuccessListener(uri -> Picasso.with(getBaseContext()).load(uri)
-                        .centerCrop().fit().error(R.id.profile).into((ImageView) navView.findViewById(R.id.profiles_image)))
+                islandRef.getDownloadUrl().addOnSuccessListener(uri -> Picasso.get().load(uri)
+                        .centerCrop().fit().into((ImageView) navView.findViewById(R.id.profiles_image)))
                         .addOnFailureListener(exception -> Toast.makeText(this, exception.getMessage(), Toast.LENGTH_SHORT).show());
             }
         });

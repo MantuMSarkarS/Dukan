@@ -52,7 +52,7 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter<DealsRecycler
             holder.mItemOldPrice.setText(response.getOldPrice());
             holder.mItemDetails.setText(response.getModelName());
             holder.mItemSpec.setText(response.getDescription());
-            Picasso.with(mContext).load(response.getImage()).placeholder(R.drawable.icon).error(R.drawable.icon).into(holder.mDealsImage);
+            Picasso.get().load(response.getImage()).placeholder(R.drawable.icon).error(R.drawable.icon).into(holder.mDealsImage);
             holder.mDealsRow.setOnClickListener(v->{
                 mListener.onItemClick(response,position);
             });
@@ -64,7 +64,7 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter<DealsRecycler
             if(response.getOldPrice().equals("") || response.getOldPrice().isEmpty()){
                 holder.mMostViewRupeeSymbol.setVisibility(View.GONE);
             }
-            Picasso.with(mContext).load(response.getImage()).placeholder(R.drawable.icon).error(R.drawable.icon).into(holder.mMostViewImage);
+            Picasso.get().load(response.getImage()).placeholder(R.drawable.icon).error(R.drawable.icon).into(holder.mMostViewImage);
             holder.mMostViewRow.setOnClickListener(v->{
                 mListener.onItemClick(response,position);
             });

@@ -49,7 +49,7 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
                 holder.mCategotyItem.setVisibility(View.GONE);
                 holder.mCategotyItems.setVisibility(View.VISIBLE);
                 holder.mTitles.setText(imageList.getTitle());
-                Picasso.with(mContext).load(imageList.getImage()).error(R.drawable.icon).into(holder.mImageViews);
+                Picasso.get().load(imageList.getImage()).error(R.drawable.icon).into(holder.mImageViews);
                 holder.mCategotyItems.setOnClickListener(v -> {
                     mListener.onItemClick(imageList, position);
                 });
@@ -58,7 +58,7 @@ public class CategoryRecyclerViewAdapter extends RecyclerView.Adapter<CategoryRe
                 holder.mCategotyItem.setVisibility(View.VISIBLE);
                 holder.mCategotyItems.setVisibility(View.GONE);
                 holder.mTitle.setText(imageList.getTitle());
-                Picasso.with(mContext).load(imageList.getImage()).error(R.drawable.icon).into(holder.mImageView);
+                Picasso.get().load(imageList.getImage()).error(R.drawable.icon).into(holder.mImageView);
                 holder.mCategotyItem.setOnClickListener(v -> {
                     mListener.onItemClick(imageList, position);
                 });
