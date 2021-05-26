@@ -3,17 +3,13 @@ package com.milkyway.dukan.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.core.widget.NestedScrollView;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -21,9 +17,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.milkyway.dukan.R;
 import com.milkyway.dukan.activities.MainActivity;
 import com.milkyway.dukan.activities.SearchActivity;
@@ -33,8 +26,9 @@ import com.milkyway.dukan.adapters.DealsRecyclerViewAdapter;
 import com.milkyway.dukan.adapters.TopPicksRecyclerViewAdapter;
 import com.milkyway.dukan.adapters.ViewPagerAdapter;
 import com.milkyway.dukan.databinding.FragmentHomeBinding;
-import com.milkyway.dukan.model.DealsOfTheDayResponse;
+import com.milkyway.dukan.model.CommonModel;
 import com.milkyway.dukan.model.SliderImage;
+import com.milkyway.dukan.model.TopPicksResponse;
 import com.milkyway.dukan.model.ViewPagerSliderImage;
 import com.milkyway.dukan.util.Session;
 import com.milkyway.dukan.viewModel.CategoriesViewModel;
@@ -83,7 +77,7 @@ public class HomeFragment extends Fragment {
     }
 
 
-   /* public void prepareDots(int custom_position) {
+    public void prepareDots(int custom_position) {
         if (mBinding.bannerDotsLayout.getChildCount() > 0) {
             mBinding.bannerDotsLayout.removeAllViews();
         }
@@ -99,13 +93,13 @@ public class HomeFragment extends Fragment {
             params.setMargins(4, 0, 0, 4);
             mBinding.bannerDotsLayout.addView(imageView[i], params);
         }
-    }*/
+    }
 
     @Override
     public void onResume() {
         super.onResume();
         ((MainActivity) requireActivity()).setActionBarTitle("Duकाন");
-       /* prepareDots(custom_position++);
+        prepareDots(custom_position++);
         mBinding.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -123,7 +117,7 @@ public class HomeFragment extends Fragment {
             public void onPageScrollStateChanged(int state) {
 
             }
-        });*/
+        });
        /* mBinding.nestedScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
 
             if (scrollY > oldScrollY) {
@@ -132,26 +126,22 @@ public class HomeFragment extends Fragment {
                 System.out.println("End of NestedScrollView 1");
             }
         });*/
-        mBinding.allDeals.setOnClickListener(view->{
+        mBinding.allDeals.setOnClickListener(view -> {
             ViewProductListFragment fragment = new ViewProductListFragment();
             Bundle bundle = new Bundle();
 
             fragment.setArguments(bundle);
-            getChildFragmentManager().beginTransaction().replace(R.id.mainContainer,new ViewProductListFragment()).commit();
+            getChildFragmentManager().beginTransaction().replace(R.id.mainContainer, new ViewProductListFragment()).commit();
         });
         mBinding.searchItems.setOnClickListener(v -> {
-           /* requireActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment, new SearchItemsFragment())
-                    .commit();*/
-            Intent intent=new Intent(requireActivity(), SearchActivity.class);
+            Intent intent = new Intent(requireActivity(), SearchActivity.class);
             startActivity(intent);
             requireActivity().overridePendingTransition(0, 0);
 
         });
         mBinding.progressBar.setVisibility(View.VISIBLE);
         viewModel.getCategoryModelData().observe(getViewLifecycleOwner(), images -> {
-            if(images!=null){
+            if (images != null) {
                 mBinding.recyclerView.setVisibility(View.VISIBLE);
                 mBinding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
                 mBinding.recyclerView.setAdapter(new CategoryRecyclerViewAdapter(images, getContext(), "", (imageList, position) -> {
@@ -178,7 +168,7 @@ public class HomeFragment extends Fragment {
             }
         });
         mViewpagerViewModel.getViewPagerModelData().observe(getViewLifecycleOwner(), viewPagerSliderImages -> {
-            if (viewPagerSliderImages!=null){
+            if (viewPagerSliderImages != null) {
                 mBinding.viewPager.setVisibility(View.VISIBLE);
                 mImages = viewPagerSliderImages;
                 final Handler handler = new Handler();
@@ -201,36 +191,71 @@ public class HomeFragment extends Fragment {
 
         });
         mDealsViewModel.getDealsModelData().observe(getViewLifecycleOwner(), dealsList -> {
-            if(dealsList!=null){
+            if (dealsList != null) {
                 mBinding.dealsTitle.setVisibility(View.VISIBLE);
                 mBinding.dealsLay.setVisibility(View.VISIBLE);
                 mBinding.dealsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-                mBinding.dealsRecyclerView.setAdapter(new DealsRecyclerViewAdapter(dealsList, getContext(),"deals", (imageList, position) -> {
-                    Intent intent=new Intent(requireActivity(), ViewProductActivity.class);
-                    intent.putExtra("product_id",imageList.getModelid());
-                    startActivity(intent);
-                    requireActivity().overridePendingTransition(0, 0);
+                mBinding.dealsRecyclerView.setAdapter(new DealsRecyclerViewAdapter(dealsList, getContext(), "deals", new DealsRecyclerViewAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(CommonModel imageList, int position) {
+                        Intent intent = new Intent(requireActivity(), ViewProductActivity.class);
+                        CommonModel response = new CommonModel(dealsList.get(position).getImage(),
+                                dealsList.get(position).getDescription(), dealsList.get(position).getModelName(),
+                                dealsList.get(position).getModelid(), dealsList.get(position).getNewPrice(),
+                                dealsList.get(position).getOldPrice(), dealsList.get(position).getRamSize(), "");
+                        intent.putExtra("product_details", response);
+                        startActivity(intent);
+                        requireActivity().overridePendingTransition(0, 0);
+                    }
+
+                    @Override
+                    public void onWishChacked(CommonModel imageList, int position) {
+                        CommonModel response = new CommonModel(dealsList.get(position).getImage(),
+                                dealsList.get(position).getDescription(), dealsList.get(position).getModelName(),
+                                dealsList.get(position).getModelid(), dealsList.get(position).getNewPrice(),
+                                dealsList.get(position).getOldPrice(), dealsList.get(position).getRamSize(), "");
+                    }
                 }));
                 mMostViewedViewModel.getMostViewedModelData().observe(getViewLifecycleOwner(), mostViewList -> {
-                    if (mostViewList!=null){
+                    if (mostViewList != null) {
                         mBinding.mostViewTitle.setVisibility(View.VISIBLE);
                         mBinding.mostViewLay.setVisibility(View.VISIBLE);
                         mBinding.mostViewedRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-                        mBinding.mostViewedRecyclerView.setAdapter(new DealsRecyclerViewAdapter(mostViewList, getContext(),"most_view" , (imageList, position) -> {
-                            Intent intent=new Intent(requireActivity(), ViewProductActivity.class);
-                            intent.putExtra("product_id",mostViewList.get(position).getModelid()    );
-                            startActivity(intent);
-                            requireActivity().overridePendingTransition(0, 0);
+                        mBinding.mostViewedRecyclerView.setAdapter(new DealsRecyclerViewAdapter(mostViewList, getContext(), "most_view", new DealsRecyclerViewAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(CommonModel imageList, int position) {
+                                Intent intent = new Intent(requireActivity(), ViewProductActivity.class);
+                                CommonModel response = new CommonModel(mostViewList.get(position).getImage(),
+                                        mostViewList.get(position).getDescription(), mostViewList.get(position).getModelName(),
+                                        mostViewList.get(position).getModelid(), mostViewList.get(position).getNewPrice(),
+                                        mostViewList.get(position).getOldPrice(), mostViewList.get(position).getRamSize(), "");
+                                intent.putExtra("product_details", response);
+                                startActivity(intent);
+                                requireActivity().overridePendingTransition(0, 0);
+                            }
+
+                            @Override
+                            public void onWishChacked(CommonModel imageList, int position) {
+                                CommonModel response = new CommonModel(mostViewList.get(position).getImage(),
+                                        mostViewList.get(position).getDescription(), mostViewList.get(position).getModelName(),
+                                        mostViewList.get(position).getModelid(), mostViewList.get(position).getNewPrice(),
+                                        mostViewList.get(position).getOldPrice(), mostViewList.get(position).getRamSize(), "");
+                            }
                         }));
                         mTopPicksModel.getTopPicksModelData().observe(getViewLifecycleOwner(), topPicksList -> {
-                            if (topPicksList!=null){
+                            if (topPicksList != null) {
                                 mBinding.progressBar.setVisibility(View.GONE);
                                 mBinding.topPickTitle.setVisibility(View.VISIBLE);
                                 mBinding.topPickLay.setVisibility(View.VISIBLE);
                                 mBinding.topPicksRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-                                mBinding.topPicksRecyclerView.setAdapter(new TopPicksRecyclerViewAdapter(topPicksList, getContext(),"toppicks" , (imageList, position) -> {
-                                    Intent intent=new Intent(requireActivity(), ViewProductActivity.class);
-                                    intent.putExtra("product_id",topPicksList.get(position).getModelid());
+                                mBinding.topPicksRecyclerView.setAdapter(new TopPicksRecyclerViewAdapter(topPicksList, getContext(), "toppicks", (imageList, position) -> {
+                                    Intent intent = new Intent(requireActivity(), ViewProductActivity.class);
+                                    TopPicksResponse response = new TopPicksResponse(topPicksList.get(position).getImage(),
+                                            topPicksList.get(position).getDescription(), topPicksList.get(position).getModelName(),
+                                            topPicksList.get(position).getModelid(), topPicksList.get(position).getNewPrice(),
+                                            topPicksList.get(position).getNewPrice(), topPicksList.get(position).getDiscount(),
+                                            topPicksList.get(position).getRamSize());
+                                    intent.putExtra("product_details", response);
                                     startActivity(intent);
                                     requireActivity().overridePendingTransition(0, 0);
                                 }));
@@ -241,25 +266,5 @@ public class HomeFragment extends Fragment {
             }
 
         });
-
-
-        /*FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(new OnCompleteListener<String>() {
-                    @Override
-                    public void onComplete(@NonNull Task<String> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
-                            return;
-                        }
-
-                        // Get new FCM registration token
-                        String token = task.getResult();
-
-                        // Log and toast
-
-                        Log.d(TAG, token);
-                       // Toast.makeText(getContext(), token, Toast.LENGTH_SHORT).show();
-                    }
-                });*/
     }
 }

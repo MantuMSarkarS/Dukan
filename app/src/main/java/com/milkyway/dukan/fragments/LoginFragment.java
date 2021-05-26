@@ -18,6 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -82,7 +84,7 @@ public class LoginFragment extends Fragment {
     private DocumentReference mReference;
     private static final int RC_SIGN_IN = 1;
     public LoginActivity activity;
-
+    NavController mNavController;
 
     public LoginFragment() {
     }
@@ -98,7 +100,7 @@ public class LoginFragment extends Fragment {
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(requireActivity(), callback);
-
+        mNavController = Navigation.findNavController(requireActivity(), R.id.login_fragment);
         mSession = new Session(getContext());
         mFirestore = FirebaseFirestore.getInstance();
        /* FacebookSdk.sdkInitialize(this.getContext());
@@ -116,13 +118,12 @@ public class LoginFragment extends Fragment {
         mEmail = mBinding.email.getText().toString();
         mPassword = mBinding.password.getText().toString();
         mAuth = FirebaseAuth.getInstance();
-        /*if(mAuth.getCurrentUser() != null){
-            login();
-        }*/
         mBinding.login.setOnClickListener(v -> {
             login();
         });
-        mBinding.newUserText.setOnClickListener(v -> requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameContainer, new RegisterFragment()).commit());
+        mBinding.newUserText.setOnClickListener(v -> {
+            mNavController.navigate(R.id.registerFragment);
+        });
         mBinding.email.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

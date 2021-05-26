@@ -43,21 +43,21 @@ public class DefaultFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mBinding.registerButton.setOnClickListener(v->{
-            openRegisterFragment();
+           // openRegisterFragment();
         });
         mBinding.loginButton.setOnClickListener(v->{
-            openLoginFragment();
+            //openLoginFragment();
         });
     }
-    private void openRegisterFragment() {
+   /* private void openRegisterFragment() {
         mBinding.buttonLayout.setVisibility(View.GONE);
         mBinding.bgImage.setVisibility(View.GONE);
         requireActivity().getSupportFragmentManager().beginTransaction().add(R.id.frameContainer,new RegisterFragment()).commit();
-    }
+    }*/
 
-    private void openLoginFragment() {
+   /* private void openLoginFragment() {
         mBinding.buttonLayout.setVisibility(View.GONE);
         mBinding.bgImage.setVisibility(View.GONE);
         requireActivity().getSupportFragmentManager().beginTransaction().add(R.id.frameContainer,new LoginFragment()).commit();
-    }
+    }*/
 }

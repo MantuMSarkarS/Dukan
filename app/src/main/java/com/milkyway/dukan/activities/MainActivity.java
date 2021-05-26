@@ -1,6 +1,7 @@
 package com.milkyway.dukan.activities;
 
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,8 +39,7 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private FirebaseAuth mAuth;
-    public NavController navController;
-    public String mUsername, mEmail, mMobile, mPassword, userId;
+    public String mUsername, mEmail, mMobile, mPassword, userId, from;
     private Session mSession;
     public TextView name, email;
     FirebaseFirestore fStore;
@@ -49,10 +49,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DocumentReference reference;
     ActivityMainBinding mBinding;
     View navView;
+    public NavController mNavController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding= DataBindingUtil.setContentView(this,R.layout.activity_main);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         mBinding.setActivity(this);
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
@@ -61,8 +63,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
+        mNavController = Navigation.findNavController(this, R.id.fragment);
         mAuth = FirebaseAuth.getInstance();
         setupNavigation();
+        Intent intent = this.getIntent();
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
+            if (bundle.getString("from").equals("viewProduct")) {
+                mNavController.navigate(R.id.cartFragment);
+            }
+        }
     }
 
     // Setting Up One Time Navigation
@@ -73,9 +83,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navView = mBinding.navView.getHeaderView(0);
         name = navView.findViewById(R.id.user_name);
         email = navView.findViewById(R.id.user_email);
-        navController = Navigation.findNavController(this, R.id.fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, mBinding.drawerLayout);
-        NavigationUI.setupWithNavController(mBinding.navView, navController);
+        NavigationUI.setupActionBarWithNavController(this, mNavController, mBinding.drawerLayout);
+        NavigationUI.setupWithNavController(mBinding.navView, mNavController);
         mBinding.navView.setNavigationItemSelectedListener(this);
         userId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
         fStore = FirebaseFirestore.getInstance();
@@ -84,9 +93,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mStorageRef = storage.getReference();
         islandRef = mStorageRef.child("profile_images").child(userId);
         reference.addSnapshotListener(this, (value, error) -> {
-            if(value != null){
-                Log.d("name", "setupNavigation: "+value.getString("name"));
-                Log.d("email", "setupNavigation: "+value.getString("email"));
+            if (value != null) {
+                Log.d("name", "setupNavigation: " + value.getString("name"));
+                Log.d("email", "setupNavigation: " + value.getString("email"));
                 name.setText(value.getString("name"));
                 email.setText(value.getString("email"));
                 islandRef.getDownloadUrl().addOnSuccessListener(uri -> Picasso.get().load(uri)
@@ -99,19 +108,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu,menu);
-        mBinding.   drawerLayout.closeDrawers();
-        mBinding.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                int id = item.getItemId();
-                if(id==R.id.menu_notification){
-                    navController.navigate(R.id.noticationFragment);
-                }else if(id==R.id.menu_cart) {
-                    navController.navigate(R.id.cartFragment);
-                }
-                return false;
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        mBinding.drawerLayout.closeDrawers();
+        mBinding.toolbar.setOnMenuItemClickListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.menu_notification) {
+                mNavController.navigate(R.id.noticationFragment);
+            } else if (id == R.id.menu_cart) {
+                mNavController.navigate(R.id.cartFragment);
             }
+            return false;
         });
         return true;
     }
@@ -134,38 +140,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setTitle(title);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         menuItem.setChecked(true);
-        mBinding.   drawerLayout.closeDrawers();
+        mBinding.drawerLayout.closeDrawers();
         int id = menuItem.getItemId();
         switch (id) {
             case R.id.home:
-                navController.navigate(R.id.homeFragment);
+                mNavController.navigate(R.id.homeFragment);
                 break;
             case R.id.categories:
-                navController.navigate(R.id.categoryFragment);
+                mNavController.navigate(R.id.categoryFragment);
                 break;
             case R.id.deals:
-                navController.navigate(R.id.cartFragment);
+                mNavController.navigate(R.id.cartFragment);
                 break;
             case R.id.cart:
-                navController.navigate(R.id.cartFragment);
+                mNavController.navigate(R.id.cartFragment);
                 break;
             case R.id.orders:
-                navController.navigate(R.id.orderFragment);
+                mNavController.navigate(R.id.orderFragment);
                 break;
             case R.id.notification:
-                navController.navigate(R.id.noticationFragment);
+                mNavController.navigate(R.id.noticationFragment);
                 break;
             case R.id.profile:
-                navController.navigate(R.id.profileFragment);
+                mNavController.navigate(R.id.profileFragment);
                 break;
             case R.id.privacyPolicy:
-                navController.navigate(R.id.PPFragment);
+                mNavController.navigate(R.id.PPFragment);
                 break;
             case R.id.help:
-                navController.navigate(R.id.helpCenterFragment);
+                mNavController.navigate(R.id.helpCenterFragment);
                 break;
             case R.id.singout:
                 mAuth.signOut();

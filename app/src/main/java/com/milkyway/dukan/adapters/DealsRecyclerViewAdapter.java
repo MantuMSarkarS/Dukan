@@ -13,9 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.milkyway.dukan.R;
-import com.milkyway.dukan.model.DealsOfTheDayResponse;
-import com.milkyway.dukan.model.SliderImage;
-import com.milkyway.dukan.model.TopPicksResponse;
+import com.milkyway.dukan.model.CommonModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -23,12 +21,12 @@ import java.util.List;
 public class DealsRecyclerViewAdapter extends RecyclerView.Adapter<DealsRecyclerViewAdapter.MyViewHolder> {
 
 
-    List<DealsOfTheDayResponse> mDeals;
+    List<CommonModel> mDeals;
     OnItemClickListener mListener;
     Context mContext;
     String mFrom;
 
-    public DealsRecyclerViewAdapter(List<DealsOfTheDayResponse> mDeals, Context mContext, String mFrom,OnItemClickListener mListener) {
+    public DealsRecyclerViewAdapter(List<CommonModel> mDeals, Context mContext, String mFrom, OnItemClickListener mListener) {
         this.mDeals = mDeals;
         this.mListener = mListener;
         this.mContext = mContext;
@@ -45,7 +43,7 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter<DealsRecycler
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull DealsRecyclerViewAdapter.MyViewHolder holder, int position) {
-        DealsOfTheDayResponse response=mDeals.get(position);
+        CommonModel response=mDeals.get(position);
         if(mFrom.equals("deals")){
             holder.mDealsRow.setVisibility(View.VISIBLE);
             holder.mItemPrice.setText(response.getNewPrice());
@@ -56,6 +54,10 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter<DealsRecycler
             holder.mDealsRow.setOnClickListener(v->{
                 mListener.onItemClick(response,position);
             });
+            holder.mIswish.setOnClickListener(v->{
+                mListener.onWishChacked(response,position);
+            });
+
         }else if(mFrom.equals("most_view")){
             holder.mMostViewRow.setVisibility(View.VISIBLE);
             holder.mMostViewItemPrice.setText(response.getNewPrice());
@@ -81,13 +83,15 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter<DealsRecycler
 
     }
     public interface OnItemClickListener {
-        void onItemClick(DealsOfTheDayResponse imageList, int position);
+        void onItemClick(CommonModel imageList, int position);
+        void onWishChacked(CommonModel imageList, int position);
     }
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
         ImageView mDealsImage,mMostViewImage,mTopPicksImage;
-        TextView mItemPrice,mItemDetails,mItemSpec,mItemOldPrice,mrupeeSymbol;
-        TextView mMostViewItemPrice,mMostViewItemDetails,mMostViewItemSpec,mMostViewItemOldPrice,mMostViewRupeeSymbol;
+        TextView mMostViewItemPrice,mMostViewItemDetails,mMostViewItemSpec,mMostViewItemOldPrice,
+                mItemPrice,mItemDetails,mItemSpec,mItemOldPrice,mrupeeSymbol,mIswish,mMostViewIsWish,
+                mMostViewRupeeSymbol;
         LinearLayout mMostViewRow,mDealsRow,mTopPicksRow;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -98,6 +102,7 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter<DealsRecycler
             mItemDetails=itemView.findViewById(R.id.item_name);
             mItemSpec=itemView.findViewById(R.id.item_spec);
             mrupeeSymbol=itemView.findViewById(R.id.oldprice_rupee);
+            mIswish=itemView.findViewById(R.id.deals_wish);
 
             mMostViewRow=itemView.findViewById(R.id.most_view_row);
             mMostViewItemDetails=itemView.findViewById(R.id.most_view_item_name);
@@ -105,6 +110,7 @@ public class DealsRecyclerViewAdapter extends RecyclerView.Adapter<DealsRecycler
             mMostViewRupeeSymbol=itemView.findViewById(R.id.most_view_oldprice_rupee);
             mMostViewItemPrice=itemView.findViewById(R.id.most_view_item_price);
             mMostViewImage=itemView.findViewById(R.id.most_view_Image);
+            mMostViewIsWish=itemView.findViewById(R.id.most_view_wish);
         }
     }
 }

@@ -8,6 +8,9 @@ import android.util.Log;
 import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,15 +25,17 @@ public class LoginActivity extends AppCompatActivity {
     private boolean isBackButtonPressed=false;
     private ActivityLoginBinding mBinding;
     private FirebaseAuth mAuth;
+    NavController mNavController;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding= DataBindingUtil.setContentView(this,R.layout.activity_login);
         mBinding.setActivity(this);
         mAuth = FirebaseAuth.getInstance();
-        getSupportFragmentManager().beginTransaction().attach(new LoginFragment()).commit();
+        mNavController = Navigation.findNavController(this, R.id.login_fragment);
+        /*getSupportFragmentManager().beginTransaction().attach(new LoginFragment()).commit();
         getSupportFragmentManager().beginTransaction().attach(new RegisterFragment()).commit();
-        getSupportFragmentManager().beginTransaction().add(R.id.frameContainer,new LoginFragment()).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.frameContainer,new LoginFragment()).commit();*/
     }
 
 
@@ -45,4 +50,5 @@ public class LoginActivity extends AppCompatActivity {
         Fragment fragment = getFragmentManager().findFragmentById(R.id.frameContainer);
         fragment.onActivityResult(requestCode, resultCode, data);
     }*/
+
 }

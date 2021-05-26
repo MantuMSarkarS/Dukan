@@ -4,24 +4,9 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <RelativeLayout
-        android:id="@+id/product_size_border"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/product_size_layout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dimen_10dp"
-        android:background="@drawable/border_button">
-
-        <TextView
-            android:id="@+id/product_size_list"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|end"
-            android:elevation="@dimen/dimen_5dp"
-            android:paddingStart="@dimen/dimen_25dp"
-            android:paddingTop="@dimen/dimen_8dp"
-            android:paddingEnd="@dimen/dimen_25dp"
-            android:paddingBottom="@dimen/dimen_8dp"
-            android:text="30"
-            android:textColor="#0B7BAE" />
-    </RelativeLayout>
+        android:orientation="horizontal"
+        android:layout_height="wrap_content" />
 </RelativeLayout>

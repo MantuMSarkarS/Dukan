@@ -2,6 +2,7 @@ package com.milkyway.dukan.repositories;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.milkyway.dukan.model.CommonModel;
 import com.milkyway.dukan.model.DealsOfTheDayResponse;
 import com.milkyway.dukan.model.SliderImage;
 import com.milkyway.dukan.model.TopPicksResponse;
@@ -31,7 +32,7 @@ public class ViewPagerFirebaseRepository {
         this.onFirebaseTaskCompleteForTopPicks = onFirebaseTaskCompleteForTopPicks;
     }
     public interface OnFirebaseTaskComplete {
-        void dealsList(List<DealsOfTheDayResponse> dealsList);
+        void dealsList(List<CommonModel> dealsList);
         void categoryList(List<ViewPagerSliderImage> imageList);
         void error(Exception e);
     }
@@ -47,13 +48,13 @@ public class ViewPagerFirebaseRepository {
 
 
     public interface OnFirebaseTaskCompleteForDeals {
-        void getMostViewedList(List<DealsOfTheDayResponse> dealsList);
+        void getMostViewedList(List<CommonModel> dealsList);
         void error(Exception e);
     }
     public void getDealsList(){
         mDealsReference.get().addOnCompleteListener(task -> {
             if(task.isSuccessful()){
-                onFirebaseTaskComplete.dealsList(task.getResult().toObjects(DealsOfTheDayResponse.class));
+                onFirebaseTaskComplete.dealsList(task.getResult().toObjects(CommonModel.class));
             }else {
                 onFirebaseTaskComplete.error(task.getException());
             }
@@ -62,7 +63,7 @@ public class ViewPagerFirebaseRepository {
     public void getMostViewItemList(){
         mMostViewedReference.get().addOnCompleteListener(task -> {
             if(task.isSuccessful()){
-                onFirebaseTaskCompleteForDeals.getMostViewedList(task.getResult().toObjects(DealsOfTheDayResponse.class));
+                onFirebaseTaskCompleteForDeals.getMostViewedList(task.getResult().toObjects(CommonModel.class));
             }else {
                 onFirebaseTaskCompleteForDeals.error(task.getException());
             }

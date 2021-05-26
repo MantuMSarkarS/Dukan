@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.milkyway.dukan.model.CommonModel;
 import com.milkyway.dukan.model.DealsOfTheDayResponse;
 import com.milkyway.dukan.model.SliderImage;
 import com.milkyway.dukan.model.ViewPagerSliderImage;
@@ -15,18 +16,18 @@ import java.util.List;
 public class DealsViewModel extends ViewModel implements ViewPagerFirebaseRepository.OnFirebaseTaskComplete {
 
     private ViewPagerFirebaseRepository dealsrepository = new ViewPagerFirebaseRepository(this);
-    private MutableLiveData<List<DealsOfTheDayResponse>> dealsliveData = new MutableLiveData<>();
+    private MutableLiveData<List<CommonModel>> dealsliveData = new MutableLiveData<>();
 
 
     public DealsViewModel() {
         dealsrepository.getDealsList();
     }
 
-    public LiveData<List<DealsOfTheDayResponse>> getDealsModelData() {
+    public LiveData<List<CommonModel>> getDealsModelData() {
         return dealsliveData;
     }
     @Override
-    public void dealsList(List<DealsOfTheDayResponse> dealsList) {
+    public void dealsList(List<CommonModel> dealsList) {
         dealsliveData.setValue(dealsList);
     }
 

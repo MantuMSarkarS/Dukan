@@ -1,10 +1,10 @@
 package com.milkyway.dukan.model;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
-public class DealsOfTheDayResponse  implements Serializable {
+public class CommonModel implements Serializable {
     private String Image;
     private String Description;
     private String ModelName;
@@ -12,11 +12,9 @@ public class DealsOfTheDayResponse  implements Serializable {
     private String NewPrice;
     private String OldPrice;
     private List<String> RamSize;
+    private String Discount;
 
-    public DealsOfTheDayResponse() {
-    }
-
-    public DealsOfTheDayResponse(String image, String description, String modelName, String modelid, String newPrice, String oldPrice, List<String> ramSize) {
+    public CommonModel(String image, String description, String modelName, String modelid, String newPrice, String oldPrice, List<String> ramSize, String discount) {
         Image = image;
         Description = description;
         ModelName = modelName;
@@ -24,22 +22,7 @@ public class DealsOfTheDayResponse  implements Serializable {
         NewPrice = newPrice;
         OldPrice = oldPrice;
         RamSize = ramSize;
-    }
-
-    public List<String> getRamSize() {
-        return RamSize;
-    }
-
-    public void setRamSize(List<String> ramSize) {
-        RamSize = ramSize;
-    }
-
-    public String getDescription() {
-        return Description;
-    }
-
-    public void setDescription(String description) {
-        Description = description;
+        Discount = discount;
     }
 
     public String getImage() {
@@ -48,6 +31,14 @@ public class DealsOfTheDayResponse  implements Serializable {
 
     public void setImage(String image) {
         Image = image;
+    }
+
+    public String getDescription() {
+        return Description;
+    }
+
+    public void setDescription(String description) {
+        Description = description;
     }
 
     public String getModelName() {
@@ -80,5 +71,21 @@ public class DealsOfTheDayResponse  implements Serializable {
 
     public void setOldPrice(String oldPrice) {
         OldPrice = oldPrice;
+    }
+
+    public List<String> getRamSize() {
+        return RamSize;
+    }
+
+    public void setRamSize(List<String> ramSize) {
+        RamSize = ramSize;
+    }
+
+    public String getDiscount() {
+        return Discount;
+    }
+
+    public void setDiscount(String discount) {
+        Discount = discount;
     }
 }

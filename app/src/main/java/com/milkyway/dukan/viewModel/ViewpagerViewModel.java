@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.milkyway.dukan.model.CommonModel;
 import com.milkyway.dukan.model.DealsOfTheDayResponse;
 import com.milkyway.dukan.model.SliderImage;
 import com.milkyway.dukan.model.ViewPagerSliderImage;
@@ -28,7 +29,7 @@ public class ViewpagerViewModel extends ViewModel implements ViewPagerFirebaseRe
     }
 
     @Override
-    public void dealsList(List<DealsOfTheDayResponse> dealsList) {
+    public void dealsList(List<CommonModel> dealsList) {
 
     }
 

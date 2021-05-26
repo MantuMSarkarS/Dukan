@@ -111,8 +111,7 @@
                         android:id="@+id/view_image"
                         android:layout_width="match_parent"
                         android:layout_height="450dp"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/download" />
+                        android:scaleType="fitXY" />
 
                     <androidx.viewpager.widget.ViewPager
                         android:id="@+id/viewPager"
@@ -277,6 +276,7 @@
 
                     </LinearLayout>
                     <LinearLayout
+                        android:id="@+id/product_size"
                         android:layout_marginTop="@dimen/dimen_10dp"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dimen_45dp"
@@ -289,13 +289,22 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="start|center"
                             android:layout_marginStart="@dimen/dimen_10dp"
+                            android:layout_weight="0"
+                            android:text="Size : "
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/dimen_14sp" />
+                        <TextView
+                            android:id="@+id/size"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start|center"
+                            android:layout_marginStart="@dimen/dimen_10dp"
                             android:layout_weight="1"
-                            android:text="Size"
+                            android:text=""
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/dimen_14sp" />
 
                         <ImageView
-                            android:id="@+id/product_size"
                             android:layout_width="@dimen/dimen_22dp"
                             android:layout_height="@dimen/dimen_22dp"
                             android:layout_gravity="end|center"

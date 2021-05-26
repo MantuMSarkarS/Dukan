@@ -78,6 +78,7 @@
                     android:background="@android:color/transparent"
                     android:gravity="center"
                     android:hint="Email"
+                    app:startIconDrawable="@drawable/profile"
                     app:boxBackgroundColor="@android:color/transparent"
                     app:errorEnabled="true"
                     app:errorTextAppearance="@style/CustomTextInputLayoutStyle.ErrorTextStyle"
@@ -113,6 +114,7 @@
                     app:errorTextAppearance="@style/CustomTextInputLayoutStyle.ErrorTextStyle"
                     app:passwordToggleEnabled="true"
                     tools:ignore="MissingConstraints"
+                    app:startIconDrawable="@drawable/password"
                     tools:layout_editor_absoluteX="79dp"
                     tools:layout_editor_absoluteY="106dp">
 

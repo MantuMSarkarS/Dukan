@@ -1,6 +1,9 @@
 package com.milkyway.dukan.model;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TopPicksResponse implements Serializable {
     private String Image;
@@ -10,11 +13,11 @@ public class TopPicksResponse implements Serializable {
     private String NewPrice;
     private String OldPrice;
     private String Discount;
-
+    private ArrayList<String> RamSize;
     public TopPicksResponse() {
     }
 
-    public TopPicksResponse(String image, String description, String modelName, String modelid, String newPrice, String oldPrice, String discount) {
+    public TopPicksResponse(String image, String description, String modelName, String modelid, String newPrice, String oldPrice, String discount, ArrayList<String> ramSize) {
         Image = image;
         Description = description;
         ModelName = modelName;
@@ -22,6 +25,15 @@ public class TopPicksResponse implements Serializable {
         NewPrice = newPrice;
         OldPrice = oldPrice;
         Discount = discount;
+        RamSize = ramSize;
+    }
+
+    public ArrayList<String> getRamSize() {
+        return RamSize;
+    }
+
+    public void setRamSize(ArrayList<String> ramSize) {
+        RamSize = ramSize;
     }
 
     public String getDiscount() {
