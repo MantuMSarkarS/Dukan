@@ -2,9 +2,9 @@ package com.milkyway.dukan.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,24 +17,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -47,8 +44,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.milkyway.dukan.R;
 import com.milkyway.dukan.activities.MainActivity;
 import com.milkyway.dukan.databinding.FragmentRegisterBinding;
+import com.milkyway.dukan.model.UserModel;
 import com.milkyway.dukan.util.Session;
-
+import com.milkyway.dukan.viewModel.UserViewModel;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -59,7 +57,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class RegisterFragment extends Fragment {
 
-    public static final String TAG="RegisterFragment";
+    public static final String TAG = "RegisterFragment";
     private static final int RC_SIGN_IN = 1;
     private FragmentRegisterBinding mBinding;
     public String mName, mEmail, mMobile, mPassword;
@@ -73,6 +71,8 @@ public class RegisterFragment extends Fragment {
     private static final String EMAIL = "email";
     CallbackManager callbackManager;
     GoogleSignInClient mGoogleSignInClient;
+    UserViewModel mUserViewModel;
+
     public RegisterFragment() {
         // Required empty public constructor
     }
@@ -81,8 +81,9 @@ public class RegisterFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_register, container, false);
         View view = mBinding.getRoot();
+        mUserViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
         FacebookSdk.sdkInitialize(getApplicationContext());
-        mSession=new Session(getContext());
+        mSession = new Session(getContext());
         mFirestore = FirebaseFirestore.getInstance();
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -96,15 +97,15 @@ public class RegisterFragment extends Fragment {
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(requireActivity(), callback);
-        mBinding.facebookLogin.setOnClickListener(v->{
-            mSession.set("login","facebook");
+        mBinding.facebookLogin.setOnClickListener(v -> {
+            mSession.set("login", "facebook");
             signInWithFacebook();
         });
-        mBinding.googleLogin.setOnClickListener(v->{
-            mSession.set("login","google");
+        mBinding.googleLogin.setOnClickListener(v -> {
+            mSession.set("login", "google");
             signInWithGoogle();
         });
-        mBinding.alreadyReg.setOnClickListener(v->{
+        mBinding.alreadyReg.setOnClickListener(v -> {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameContainer, new LoginFragment()).commit();
         });
         return view;
@@ -113,12 +114,12 @@ public class RegisterFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mAuth=FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         mBinding.backRegLayout.setOnClickListener(v -> requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameContainer, new LoginFragment()).commit());
-        mBinding.regButton.setOnClickListener(v ->{
-            mSession.set("login","manual");
+        mBinding.regButton.setOnClickListener(v -> {
+            mSession.set("login", "manual");
             registerWithMobileAndPassword();
-        } );
+        });
         mBinding.userName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -132,11 +133,12 @@ public class RegisterFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length()>0){
+                if (s.length() > 0) {
                     mBinding.username.setError(null);
                 }
             }
-        }); mBinding.userPassword.addTextChangedListener(new TextWatcher() {
+        });
+        mBinding.userPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -149,11 +151,12 @@ public class RegisterFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length()>0){
+                if (s.length() > 0) {
                     mBinding.password.setError(null);
                 }
             }
-        }); mBinding.userEmail.addTextChangedListener(new TextWatcher() {
+        });
+        mBinding.userEmail.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -166,11 +169,12 @@ public class RegisterFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length()>0){
+                if (s.length() > 0) {
                     mBinding.email.setError(null);
                 }
             }
-        }); mBinding.userMobile.addTextChangedListener(new TextWatcher() {
+        });
+        mBinding.userMobile.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -183,7 +187,7 @@ public class RegisterFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length()>0){
+                if (s.length() > 0) {
                     mBinding.mobile.setError(null);
                 }
             }
@@ -192,17 +196,19 @@ public class RegisterFragment extends Fragment {
     }
 
     private void signInWithGoogle() {
-        mSession.set("logged_in","true");
+        mSession.set("logged_in", "true");
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
 
     }
-    String facebook,google,manual;
+
+    String facebook, google, manual;
+
     @Override
     public void onStart() {
         super.onStart();
-        google=mSession.get("google");
-        manual=mSession.get("manual");
+        google = mSession.get("google");
+        manual = mSession.get("manual");
       /*
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(requireContext());
         if (account != null) {
@@ -212,7 +218,7 @@ public class RegisterFragment extends Fragment {
     }
 
 
-    private void  signInWithFacebook() {
+    private void signInWithFacebook() {
         LoginManager.getInstance().logInWithReadPermissions(getActivity(), Arrays.asList("email", "public_profile"));
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -232,7 +238,7 @@ public class RegisterFragment extends Fragment {
         });
     }
 
-    private void handleFacebookToken( AccessToken accessToken) {
+    private void handleFacebookToken(AccessToken accessToken) {
         AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
@@ -273,7 +279,7 @@ public class RegisterFragment extends Fragment {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             if (account != null) {
-                mSession.set("logged_in","true");
+                mSession.set("logged_in", "true");
                 Intent intent = new Intent(requireContext(), MainActivity.class);
                 startActivity(intent);
                 Toast.makeText(requireContext(), "Signed In Successfully", Toast.LENGTH_SHORT).show();
@@ -294,28 +300,57 @@ public class RegisterFragment extends Fragment {
         mMobile = Objects.requireNonNull(mBinding.mobile.getEditText().getText()).toString().trim();
         mPassword = Objects.requireNonNull(mBinding.password.getEditText().getText()).toString().trim();
 
-        if (!textInputName() |!textInputEmail() |!textInputMobile() | !textInputPassword()) {
+        if (!textInputName() | !textInputEmail() | !textInputMobile() | !textInputPassword()) {
             Toast.makeText(getContext(), "Fill required fields", Toast.LENGTH_SHORT).show();
-        }else {
+        } else {
 
             bar.show();
-            mAuth.createUserWithEmailAndPassword(mEmail, mPassword).addOnCompleteListener(task -> {
+           /* mAuth.createUserWithEmailAndPassword(mEmail, mPassword).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     bar.dismiss();
-                    uploadUserDeatilsToFirestore();
-                    mSession.set("name",mName);
-                    mSession.set("email",mEmail);
-                    mSession.set("mobile",mMobile);
-                    mSession.set("passowrd",mPassword);
+                    //uploadUserDeatilsToFirestore();
+                    mUserViewModel.
+                    mSession.set("name", mName);
+                    mSession.set("email", mEmail);
+                    mSession.set("mobile", mMobile);
+                    mSession.set("passowrd", mPassword);
                     Toast.makeText(getContext(), "Congratulations \n You've Signed Up Successfully", Toast.LENGTH_SHORT).show();
                     requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameContainer, new LoginFragment()).commit();
                 } else {
                     bar.dismiss();
                     Toast.makeText(getContext(), "Error ! " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                 }
-            });
+            });*/
+            UserModel mUserModel = new UserModel(mEmail, mPassword);
+           String response= mUserViewModel.createUserWithEmailAndPassword(mUserModel);
+           if (response.equals()) {
+               bar.dismiss();
+               Toast.makeText(getContext(), "Congratulations \n You've Signed Up Successfully", Toast.LENGTH_SHORT).show();
+               requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frameContainer, new LoginFragment()).commit();
+           }else {
+               Toast.makeText(getContext(), "Error ! " +response., Toast.LENGTH_SHORT).show();
+           }
+
         }
 
+    }
+
+    private void uploadUserDeatilsToFirestore() {
+        userId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+        mReference = mFirestore.collection("Users").document(userId);
+        Map<String, Object> user = new HashMap<>();
+        user.put("name", mName);
+        user.put("mobile", mMobile);
+        user.put("email", mEmail);
+        user.put("password", mPassword);
+        user.put("dob", "");
+        user.put("address", "");
+        mReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "onSuccess: " + userId);
+            }
+        });
     }
 
     public boolean textInputName() {
@@ -362,21 +397,5 @@ public class RegisterFragment extends Fragment {
         }
     }
 
-    private void uploadUserDeatilsToFirestore() {
-        userId= Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-        mReference=mFirestore.collection("Users").document(userId);
-        Map<String, Object> user = new HashMap<>();
-        user.put("name", mName);
-        user.put("mobile",mMobile);
-        user.put("email", mEmail);
-        user.put("password",mPassword);
-        user.put("dob","");
-        user.put("address","");
-        mReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.d(TAG, "onSuccess: "+userId);
-            }
-        });
-    }
+
 }
